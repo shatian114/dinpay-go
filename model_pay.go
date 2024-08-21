@@ -1,5 +1,9 @@
 package dinpay
 
+import (
+	"github.com/bytedance/sonic"
+)
+
 // AppPayPreOrderMarketingRule 交易下单营销规则
 type AppPayPreOrderMarketingRule struct {
 	MarketingMerchantNo string  `json:"marketingMerchantNo"` // 营销商编
@@ -178,6 +182,14 @@ type AppPayPublicPreOrderRes struct {
 	Sign                 string  `json:"sign" sign:"0"`                          // 签名
 }
 
+func (res *AppPayPublicPreOrderRes) GetPayInfo() (payInfo *AppPayPublicPreOrderPayInfo) {
+	if len(res.PayInfo) > 0 {
+		payInfo = new(AppPayPublicPreOrderPayInfo)
+		_ = sonic.Unmarshal([]byte(res.PayInfo), payInfo)
+	}
+	return
+}
+
 // AppPayPublicPreOrderPayInfo 公众号/JS/服务窗预下单支付信息
 type AppPayPublicPreOrderPayInfo struct {
 	AppId     string `json:"appId"`     // AppId
@@ -246,6 +258,14 @@ type AppPayAppletPreOrderRes struct {
 	AppPayType           string  `json:"rt14_appPayType,omitempty" sign:"0"`     // 客户端类型,AppPayType
 	ChannelSubMerchantNo string  `json:"subMerchantNo,omitempty" sign:"0"`       // 渠道子商户号(U/A/T),不参与签名
 	Sign                 string  `json:"sign" sign:"0"`                          // MD5 签名结果
+}
+
+func (res *AppPayAppletPreOrderRes) GetPayInfo() (payInfo *AppPayAppletPreOrderPayInfo) {
+	if len(res.PayInfo) > 0 {
+		payInfo = new(AppPayAppletPreOrderPayInfo)
+		_ = sonic.Unmarshal([]byte(res.PayInfo), payInfo)
+	}
+	return
 }
 
 // AppPayAppletPreOrderPayInfo 小程序预下单支付信息
