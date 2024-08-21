@@ -16,6 +16,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/deatil/go-cryptobin v1.0.3022 h1:ZeoRxhmP8XRjaY0STdBa5+YuGx68G9DdXDLE617K8WU=
 github.com/deatil/go-cryptobin v1.0.3022/go.mod h1:N039cMpRk2+cxODj6Y1TfEPw2Q/AZoItzU2LT7VRbbg=
+github.com/deatil/go-cryptobin v1.0.3026 h1:8J1gOidVEgTa8dcdvYxZIpotu8tNGG/z9lycIYH/c0A=
+github.com/deatil/go-cryptobin v1.0.3026/go.mod h1:N039cMpRk2+cxODj6Y1TfEPw2Q/AZoItzU2LT7VRbbg=
 github.com/go-logr/logr v1.4.2 h1:6pFjapn8bFcIbiKo3XT4j/BhANplGihG6tvd+8rYgrY=
 github.com/go-logr/logr v1.4.2/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-task/slim-sprig/v3 v3.0.0 h1:sUs3vkvUymDpBKi3qH1YSqBQk9+9D/8M2mN1vB6EwHI=

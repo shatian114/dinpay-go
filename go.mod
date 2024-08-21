@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/bytedance/sonic v1.12.1
-	github.com/deatil/go-cryptobin v1.0.3022
+	github.com/deatil/go-cryptobin v1.0.3026
 	github.com/imroc/req/v3 v3.43.7
 	github.com/matoous/go-nanoid/v2 v2.1.0
 )
