@@ -31,7 +31,7 @@ func (t *Client) MerchantInfoQuery(reqBody MerchantInfoQueryReq) (res *BaseMerch
 	return
 }
 
-// MerchantRegister 商户进件
+// MerchantRegister 商户入驻
 func (t *Client) MerchantRegister(reqBody MerchantRegisterReq) (res *BaseMerchantRes[MerchantRegisterRes], err error) {
 	var response *req.Response
 	if response, err = t.merchantPost("register", reqBody); err != nil {
@@ -50,15 +50,13 @@ func (t *Client) MerchantRegister(reqBody MerchantRegisterReq) (res *BaseMerchan
 	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
 		err = errors.New("响应内容验签失败")
 	}
-	//data := "N9wwNURjZlVOmajhQpvbCPoiYTdOto35IjBoMaYQTWTFlz0VBkCYP+5Les1Ipe6uDg2Q8wAmxcqOVgTOQ84wuIcqG3+papnEGFx4ouBrTmT6GmkUGhC4kZcSCClZCxtZpWeFe6fEhOiIaVR1pWGcRfautjBBcMsw+4YvUL9nPIioe2F+wJ6O0fXJMH8segw0MVO8yVVm+40="
-
 	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
 		return nil, err
 	}
 	return
 }
 
-// MerchantRegisterQuery 商户进件查询
+// MerchantRegisterQuery 商户入驻查询
 func (t *Client) MerchantRegisterQuery(reqBody MerchantRegisterQueryReq) (res *BaseMerchantRes[MerchantRegisterQueryRes], err error) {
 	var response *req.Response
 	if response, err = t.merchantPost("registerQuery", reqBody); err != nil {
@@ -314,7 +312,7 @@ func (t *Client) MerchantWxpayReIdentify(reqBody MerchantWxpayReIdentifyReq) (re
 	return
 }
 
-// MerchantRegisterNotify 商户进件异步通知
+// MerchantRegisterNotify 商户入驻异步通知
 func (t *Client) MerchantRegisterNotify(tmpReq MerchantNotifyReq[string]) (res *MerchantNotifyReq[MerchantRegisterNotifyReqBody], err error) {
 	res = &MerchantNotifyReq[MerchantRegisterNotifyReqBody]{Success: tmpReq.Success,
 		Code: tmpReq.Code, Message: tmpReq.Message, Sign: tmpReq.Sign, Hostname: tmpReq.Hostname}

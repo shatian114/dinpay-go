@@ -45,13 +45,14 @@ type MerchantInfoQueryRes struct {
 	ServicePhone     string `json:"servicePhone,omitempty"`     // 客服联系电话
 }
 
-// MerchantRegisterReq 商户进件
+// MerchantRegisterReq 商户入驻
 type MerchantRegisterReq struct {
 	FirstClassMerchantNo     string   `json:"firstClassMerchantNo"`             // 平台商商编,智付下发的,以C开头的商户编号
 	OrderNo                  string   `json:"orderNo"`                          // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	SignName                 string   `json:"signName"`                         // 子商户签约名,营业执照上的工商注册名称(个人商户除外),注:1.个人商户请传“商户_个人姓名”;签约名至少为5个字,不能超过150个字
 	ShowName                 string   `json:"showName"`                         // 展示名,用于收银台的展示名,进件测试的可在展示名中添加“测试”字样; 注意:展示名长度不能小于2大于20
-	WebSite                  string   `json:"webSite,omitempty"`                // 商户网站地址
+	WebSite                  string   `json:"webSite,omitempty"`                // 商户交易网站地址,与“其他产品信息”二选一必填
+	OtherPdInfo              string   `json:"otherPdInfo,omitempty"`            // 其他产品信息,可输入公众号/小程序/app名称,与“网站网址”二选一必填
 	AccessUrl                string   `json:"accessUrl,omitempty"`              // 接入地址,空
 	MerchantType             string   `json:"merchantType"`                     // 子商户类型,MerchantType,个人、企业、个体商户交易限额不同,切勿传错
 	LegalPerson              string   `json:"legalPerson"`                      // 法人名字
@@ -117,7 +118,7 @@ type MerchantRegisterReq struct {
 	BenefitIdCardEndDate     string   `json:"benefIdCardEndDate,omitempty"`     // 受益人证件有效期结束时间,yyyyMMdd或长期有效
 }
 
-// MerchantRegisterRes 商户进件
+// MerchantRegisterRes 商户入驻
 type MerchantRegisterRes struct {
 	OrderNo     string `json:"orderNo"`              // 订单号 进件时的订单号
 	EntryStatus string `json:"entryStatus"`          // 进件状态 INIT:待审核,OVERRULE:申请驳回;AUDITED:审核通过
@@ -125,13 +126,13 @@ type MerchantRegisterRes struct {
 	MerchantNo  string `json:"merchantNo,omitempty"` // 子商户商编 只有进件状态为审核通过才返回
 }
 
-// MerchantRegisterQueryReq 商户进件查询
+// MerchantRegisterQueryReq 商户入驻查询
 type MerchantRegisterQueryReq struct {
 	OrderNo              string `json:"orderNo"`              // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	FirstClassMerchantNo string `json:"firstClassMerchantNo"` // 平台商商编,智付下发的,以C开头的商户编号
 }
 
-// MerchantRegisterQueryRes 商户进件查询
+// MerchantRegisterQueryRes 商户入驻查询
 type MerchantRegisterQueryRes struct {
 	OrderNo           string  `json:"orderNo"`                 // 订单号 进件时的订单号
 	Status            string  `json:"status"`                  // 进件状态 见附录5.6(INIT,待审核.OVERRULE,申请驳回.AUDITED,审核通过.)
@@ -391,7 +392,7 @@ type MerchantNotifyReq[T any] struct {
 	Hostname string `json:"hostname"`       // 处理机别名
 }
 
-// MerchantRegisterNotifyReqBody 商户进件结果回调Body
+// MerchantRegisterNotifyReqBody 商户入驻结果回调Body
 type MerchantRegisterNotifyReqBody struct {
 	OrderNo          string `json:"orderNo"`                    // 订单号 进件时的订单号
 	EntryStatus      string `json:"entryStatus"`                // 进件状态 INIT:待审核;OVERRULE:申请驳回;AUDITED:审核通过
