@@ -34,7 +34,7 @@ type AppPayRefundSplitRule struct {
 type AppPayScanOrderReq struct {
 	BizType        string  `json:"P1_bizType" sign:"1"`                   // 接口类型,固定为:AppPay
 	OrderId        string  `json:"P2_orderId" sign:"1"`                   // 商户系统内部订单号，要求50字符以内，同一商户号下订单号唯一
-	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 合利宝分配的商户号
+	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 智付分配的商户号
 	PayType        string  `json:"P4_payType" sign:"1"`                   // 支付类型,SWIPE:刷卡(被扫);SCAN:扫码(主扫)
 	OrderAmount    float64 `json:"P5_orderAmount" sign:"1"`               // 订单金额,以元为单位，最小金额为0.01
 	Currency       string  `json:"P6_currency" sign:"1"`                  // 币种类型,CNY:人民币
@@ -81,7 +81,7 @@ type AppPayScanOrderRes struct {
 	RetMsg                  string                       `json:"rt3_retMsg,omitempty" sign:"0"`                 // 返回信息
 	CustomerNumber          string                       `json:"rt4_customerNumber" sign:"1"`                   // 商户编号
 	OrderId                 string                       `json:"rt5_orderId" sign:"1"`                          // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber            string                       `json:"rt6_serialNumber,omitempty" sign:"1"`           // 合利宝交易订单号
+	SerialNumber            string                       `json:"rt6_serialNumber,omitempty" sign:"1"`           // 智付交易订单号
 	PayType                 string                       `json:"rt7_payType" sign:"1"`                          // 支付类型,SWIPE:刷卡;SCAN:扫码
 	Qrcode                  string                       `json:"rt8_qrcode,omitempty" sign:"1"`                 // 二维码信息,用于生成二维码图片，展示给用户进行扫码支付
 	WapUrl                  string                       `json:"rt9_wapurl,omitempty" sign:"1"`                 // 支付地址,商户系统显示二维码页面地址(暂不用)
@@ -123,7 +123,7 @@ type AppPayScanOrderRes struct {
 type AppPayPublicPreOrderReq struct {
 	BizType        string  `json:"P1_bizType" sign:"1"`                   // 接口类型,固定为:AppPayPublic
 	OrderId        string  `json:"P2_orderId" sign:"1"`                   // 商户订单号,要求50字符以内,同一商户号下订单号唯一
-	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 合利宝分配的商户号
+	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 智付分配的商户号
 	PayType        string  `json:"P4_payType" sign:"1"`                   // 支付类型,公众号/JS/服务窗固定为:PUBLIC
 	AppId          string  `json:"P5_appid" sign:"1"`                     // 微信支付填公众账号ID;支付宝填1;银联云闪付填1;合利付填应用编号appNo
 	DeviceInfo     string  `json:"P6_deviceInfo,omitempty" sign:"1"`      // 可以为终端设备号(门店号或收银设备ID),PC网页或公众号内支付可以传"WEB"
@@ -132,7 +132,7 @@ type AppPayPublicPreOrderReq struct {
 	OrderAmount    float64 `json:"P9_orderAmount" sign:"1"`               // 订单金额,以元为单位,最小金额为0.01
 	Currency       string  `json:"P10_currency" sign:"1"`                 // 币种类型,人民币:CNY
 	AppType        string  `json:"P11_appType" sign:"1"`                  // 客户端类型,AppPayType
-	NotifyUrl      string  `json:"P12_notifyUrl,omitempty" sign:"1"`      // 通知回调地址,异步接收合利宝支付结果通知的回调地址,通知url必须为外网可访问
+	NotifyUrl      string  `json:"P12_notifyUrl,omitempty" sign:"1"`      // 通知回调地址,异步接收智付支付结果通知的回调地址,通知url必须为外网可访问
 	SuccessToUrl   string  `json:"P13_successToUrl,omitempty" sign:"1"`   // 支付完成后,展示支付结果的页面地址;为原生态时该地址请忽略,需要商户自己在js页面控制跳转;当P7_isRaw=0微信公众号非原生态时支付完会跳转到该地址
 	OrderIp        string  `json:"P14_orderIp" sign:"1"`                  // 下单机器IP
 	GoodsName      string  `json:"P15_goodsName" sign:"1"`                // 商品名称
@@ -169,7 +169,7 @@ type AppPayPublicPreOrderRes struct {
 	RetMsg               string  `json:"rt3_retMsg,omitempty" sign:"0"`          // 返回信息
 	CustomerNumber       string  `json:"rt4_customerNumber" sign:"1"`            // 商户编号
 	OrderId              string  `json:"rt5_orderId" sign:"1"`                   // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber         string  `json:"rt6_serialNumber,omitempty" sign:"1"`    // 合利宝交易订单号
+	SerialNumber         string  `json:"rt6_serialNumber,omitempty" sign:"1"`    // 智付交易订单号
 	PayType              string  `json:"rt7_payType" sign:"1"`                   // 支付类型,PUBLIC:公众号/服务窗/JS支付
 	AppId                string  `json:"rt8_appid,omitempty" sign:"1"`           // 公众账号ID
 	TokenId              string  `json:"rt9_tokenId,omitempty" sign:"1"`         // 动态口令,预支付ID,用于后续接口调用中使用,预留参数
@@ -205,7 +205,7 @@ type AppPayPublicPreOrderPayInfo struct {
 type AppPayAppletPreOrderReq struct {
 	BizType        string  `json:"P1_bizType" sign:"1"`                   // 接口类型,固定为:AppPayApplet
 	OrderId        string  `json:"P2_orderId" sign:"1"`                   // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 合利宝分配的商户号
+	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`            // 智付分配的商户号
 	PayType        string  `json:"P4_payType" sign:"1"`                   // 支付类型,小程序固定为:"APPLET"
 	AppId          string  `json:"P5_appid" sign:"1"`                     // 支付宝买家账号ID,能获取买家账号账号ID就送,反之填1
 	DeviceInfo     string  `json:"P6_deviceInfo,omitempty" sign:"1"`      // 终端设备号(门店号或收银设备ID),PC网页或服务窗内支付可以传"WEB"
@@ -214,7 +214,7 @@ type AppPayAppletPreOrderReq struct {
 	OrderAmount    float64 `json:"P9_orderAmount" sign:"1"`               // 订单金额,以元为单位,最小金额为0.01
 	Currency       string  `json:"P10_currency" sign:"1"`                 // 人民币:CNY
 	AppType        string  `json:"P11_appType" sign:"1"`                  // 客户端类型,AppPayType
-	NotifyUrl      string  `json:"P12_notifyUrl,omitempty" sign:"1"`      // 异步接收合利宝支付结果通知的回调地址,通知url必须为外网可访问
+	NotifyUrl      string  `json:"P12_notifyUrl,omitempty" sign:"1"`      // 异步接收智付支付结果通知的回调地址,通知url必须为外网可访问
 	SuccessToUrl   string  `json:"P13_successToUrl,omitempty" sign:"1"`   // 支付完成后,展示支付结果的页面地址
 	OrderIp        string  `json:"P14_orderIp" sign:"1"`                  // 下单机器IP
 	GoodsName      string  `json:"P15_goodsName" sign:"1"`                // 商品名称,支付时账单显示
@@ -245,9 +245,9 @@ type AppPayAppletPreOrderRes struct {
 	BizType              string  `json:"rt1_bizType" sign:"1"`                   // 接口类型,固定为:AppPayApplet
 	RetCode              string  `json:"rt2_retCode" sign:"1"`                   // 参考附录：https://myshangpu.yuque.com/org-wiki-myshangpu-sfbw9n/qnpgdn/phtfgreqpllk9i2m#EkA5A
 	RetMsg               string  `json:"rt3_retMsg,omitempty" sign:"0"`          // 返回信息,不用参与签名
-	CustomerNumber       string  `json:"rt4_customerNumber" sign:"1"`            // 合利宝分配的商户号
+	CustomerNumber       string  `json:"rt4_customerNumber" sign:"1"`            // 智付分配的商户号
 	OrderId              string  `json:"rt5_orderId" sign:"1"`                   // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber         string  `json:"rt6_serialNumber,omitempty" sign:"1"`    // 合利宝交易订单号
+	SerialNumber         string  `json:"rt6_serialNumber,omitempty" sign:"1"`    // 智付交易订单号
 	PayType              string  `json:"rt7_payType" sign:"1"`                   // 支付类型APPLET:小程序支付
 	AppId                string  `json:"rt8_appid,omitempty" sign:"1"`           // app账号 Id
 	TokenId              string  `json:"rt9_tokenId,omitempty" sign:"1"`         // 动态口令,预支付ID,用于后续接口调用中使用,预留参数
@@ -282,7 +282,7 @@ type AppPayAppletPreOrderPayInfo struct {
 type AppPayOrderCloseReq struct {
 	BizType        string `json:"P1_bizType" sign:"1"`           // 接口类型,固定为:AppPayClose
 	OrderId        string `json:"P2_orderId,omitempty" sign:"1"` // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 合利宝分配的商户号
+	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 智付分配的商户号
 }
 
 // AppPayOrderCloseRes 交易订单关闭接口
@@ -290,9 +290,9 @@ type AppPayOrderCloseRes struct {
 	BizType        string `json:"rt1_bizType" sign:"1"`                // 小程序支付
 	RetCode        string `json:"rt2_retCode" sign:"1"`                // 参考附录：https://myshangpu.yuque.com/org-wiki-myshangpu-sfbw9n/qnpgdn/phtfgreqpllk9i2m#EkA5A
 	RetMsg         string `json:"rt3_retMsg,omitempty" sign:"0"`       // 返回信息
-	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 合利宝分配的商户号
+	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 智付分配的商户号
 	OrderId        string `json:"rt5_orderId" sign:"1"`                // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber   string `json:"rt6_serialNumber,omitempty" sign:"1"` // 合利宝平台唯一流水号
+	SerialNumber   string `json:"rt6_serialNumber,omitempty" sign:"1"` // 智付平台唯一流水号
 	Sign           string `json:"sign" sign:"0"`                       // MD5 签名结果
 }
 
@@ -300,7 +300,7 @@ type AppPayOrderCloseRes struct {
 type AppPayOrderCancelReq struct {
 	BizType        string `json:"P1_bizType" sign:"1"`           // 接口类型,固定为:AppPayCancel
 	OrderId        string `json:"P2_orderId,omitempty" sign:"1"` // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 合利宝分配的商户号
+	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 智付分配的商户号
 }
 
 // AppPayOrderCancelRes 交易订单撤销接口
@@ -308,9 +308,9 @@ type AppPayOrderCancelRes struct {
 	BizType        string `json:"rt1_bizType" sign:"1"`                // 接口类型,固定为:AppPayCancel
 	RetCode        string `json:"rt2_retCode" sign:"1"`                // 参考附录：https://myshangpu.yuque.com/org-wiki-myshangpu-sfbw9n/qnpgdn/phtfgreqpllk9i2m#EkA5A
 	RetMsg         string `json:"rt3_retMsg,omitempty" sign:"0"`       // 返回信息
-	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 合利宝分配的商户号
+	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 智付分配的商户号
 	OrderId        string `json:"rt5_orderId" sign:"1"`                // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber   string `json:"rt6_serialNumber,omitempty" sign:"1"` // 合利宝平台唯一流水号
+	SerialNumber   string `json:"rt6_serialNumber,omitempty" sign:"1"` // 智付平台唯一流水号
 	Recall         string `json:"recall,omitempty" sign:"0"`           // 重试标识:Y/N,是否需要继续调用撤销,Y- 需要,N-不需要;上游通道撤销未返回明确结果时可以重试调用
 	Sign           string `json:"sign" sign:"0"`                       // MD5 签名结果
 }
@@ -318,9 +318,9 @@ type AppPayOrderCancelRes struct {
 // AppPayOrderQueryReq 交易订单查询接口
 type AppPayOrderQueryReq struct {
 	BizType        string `json:"P1_bizType" sign:"1"`                // 订单查询接口,固定为:AppPayQuery
-	OrderId        string `json:"P2_orderId,omitempty" sign:"1"`      // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与” 合利宝订单流水号”二选一
-	CustomerNumber string `json:"P3_customerNumber" sign:"1"`         // 合利宝分配的商户号
-	SerialNumber   string `json:"P4_serialNumber,omitempty" sign:"0"` // 合利宝平台返回的订单流水号与”商户订单号”二选一
+	OrderId        string `json:"P2_orderId,omitempty" sign:"1"`      // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与” 智付订单流水号”二选一
+	CustomerNumber string `json:"P3_customerNumber" sign:"1"`         // 智付分配的商户号
+	SerialNumber   string `json:"P4_serialNumber,omitempty" sign:"0"` // 智付平台返回的订单流水号与”商户订单号”二选一
 }
 
 // AppPayOrderQueryRes 交易订单查询接口
@@ -328,9 +328,9 @@ type AppPayOrderQueryRes struct {
 	BizType                 string                       `json:"rt1_bizType" sign:"1"`                          // 交易类型,固定为:AppPayQuery
 	RetCode                 string                       `json:"rt2_retCode" sign:"1"`                          // 返回码
 	RetMsg                  string                       `json:"rt3_retMsg,omitempty" sign:"0"`                 // 返回信息
-	CustomerNumber          string                       `json:"rt4_customerNumber" sign:"1"`                   // 合利宝分配的商户号
+	CustomerNumber          string                       `json:"rt4_customerNumber" sign:"1"`                   // 智付分配的商户号
 	OrderId                 string                       `json:"rt5_orderId" sign:"1"`                          // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber            string                       `json:"rt6_serialNumber" sign:"1"`                     // 合利宝平台唯一流水号
+	SerialNumber            string                       `json:"rt6_serialNumber" sign:"1"`                     // 智付平台唯一流水号
 	OrderStatus             string                       `json:"rt7_orderStatus" sign:"1"`                      // 订单状态,INIT:已接收,DOING:处理中,SUCCESS:成功,FAIL:失败,CLOSE:关闭,CANCEL:撤销
 	OrderAmount             float64                      `json:"rt8_orderAmount,string" sign:"1"`               // 订单金额,以元为单位,最小金额为0.01
 	Currency                string                       `json:"rt9_currency" sign:"1"`                         // 币种类型,CNY:人民币
@@ -374,13 +374,13 @@ type AppPayOrderQueryRes struct {
 // AppPayOrderRefundReq 交易订单退款接口
 type AppPayOrderRefundReq struct {
 	BizType           string  `json:"P1_bizType" sign:"1"`                     // 交易类型,固定为:AppPayRefund
-	OrderId           string  `json:"P2_orderId,omitempty" sign:"1"`           // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与”合利宝原订单号”二选一
-	CustomerNumber    string  `json:"P3_customerNumber" sign:"1"`              // 合利宝分配的商户号
+	OrderId           string  `json:"P2_orderId,omitempty" sign:"1"`           // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与”智付原订单号”二选一
+	CustomerNumber    string  `json:"P3_customerNumber" sign:"1"`              // 智付分配的商户号
 	RefundOrderId     string  `json:"P4_refundOrderId" sign:"1"`               // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	Amount            float64 `json:"P5_amount" sign:"1"`                      // 退款金额,以元为单位,最小金额为0.01
-	CallbackUrl       string  `json:"P6_callbackUrl,omitempty" sign:"1"`       // 异步接收合利宝退款结果通知的回调地址,通知url必须为外网可访问的url,不能携带参数。
+	CallbackUrl       string  `json:"P6_callbackUrl,omitempty" sign:"1"`       // 异步接收智付退款结果通知的回调地址,通知url必须为外网可访问的url,不能携带参数。
 	Desc              string  `json:"P7_desc,omitempty" sign:"0"`              // 若商户传入,会在下发给用户的退款账单消息中体现退款原因
-	OrderSerialNumber string  `json:"P8_orderSerialNumber,omitempty" sign:"0"` // 合利宝平台原订单与”商户订单号”二选一
+	OrderSerialNumber string  `json:"P8_orderSerialNumber,omitempty" sign:"0"` // 智付平台原订单与”商户订单号”二选一
 	// Deprecated: 请勿直接赋值,应调用SplitRules添加
 	SplitRuleJson string                   `json:"ruleJson,omitempty" sign:"0"`    // 分账退款规则JSON串,需使用DES进行对称加密
 	AcqAddnData   string                   `json:"acqAddnData,omitempty" sign:"0"` // 银联二维码平台收款方附加数据,收款方附加数据退款请求,上送参加银联二维码通道营销商品维度信息;银联二维码平台参加单品营销的订单发生退款时必须上送
@@ -392,10 +392,10 @@ type AppPayOrderRefundRes struct {
 	BizType        string `json:"rt1_bizType" sign:"1"`                // 交易类型,固定为:AppPayRefund
 	RetCode        string `json:"rt2_retCode" sign:"1"`                // 返回码
 	RetMsg         string `json:"rt3_retMsg,omitempty" sign:"0"`       // 返回信息
-	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 合利宝分配的商户号
+	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`         // 智付分配的商户号
 	OrderId        string `json:"rt5_orderId" sign:"1"`                // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	RefundOrderNum string `json:"rt6_refundOrderNum" sign:"1"`         // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber   string `json:"rt7_serialNumber,omitempty" sign:"1"` // 合利宝平台唯一流水号
+	SerialNumber   string `json:"rt7_serialNumber,omitempty" sign:"1"` // 智付平台唯一流水号
 	Amount         string `json:"rt8_amount,omitempty" sign:"1"`       // 退款金额,以元为单位,最小金额为0.01
 	Currency       string `json:"rt9_currency,omitempty" sign:"1"`     // 币种类型,CNY:人民币
 	Sign           string `json:"sign" sign:"0"`                       // 签名
@@ -404,9 +404,9 @@ type AppPayOrderRefundRes struct {
 // AppPayOrderRefundQueryReq 交易订单退款查询接口
 type AppPayOrderRefundQueryReq struct {
 	BizType        string `json:"P1_bizType" sign:"1"`        // 交易类型,固定为:AppPayRefundQuery
-	RefundOrderId  string `json:"P2_refundOrderId" sign:"1"`  // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与合利宝退款订单流水号二选一
-	CustomerNumber string `json:"P3_customerNumber" sign:"1"` // 合利宝分配的商户号
-	SerialNumber   string `json:"P4_serialNumber" sign:"0"`   // 合利宝平台返回的退款订单流水号与商户退款订单号二选一
+	RefundOrderId  string `json:"P2_refundOrderId" sign:"1"`  // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一与智付退款订单流水号二选一
+	CustomerNumber string `json:"P3_customerNumber" sign:"1"` // 智付分配的商户号
+	SerialNumber   string `json:"P4_serialNumber" sign:"0"`   // 智付平台返回的退款订单流水号与商户退款订单号二选一
 }
 
 // AppPayOrderRefundQueryRes 交易订单退款查询接口
@@ -414,10 +414,10 @@ type AppPayOrderRefundQueryRes struct {
 	BizType                 string                     `json:"rt1_bizType" sign:"1"`                            // 交易类型,固定为:AppPayRefundQuery
 	RetCode                 string                     `json:"rt2_retCode" sign:"1"`                            // 返回码
 	RetMsg                  string                     `json:"rt3_retMsg,omitempty" sign:"0"`                   // 返回信息
-	CustomerNumber          string                     `json:"rt4_customerNumber" sign:"1"`                     // 合利宝分配的商户号
+	CustomerNumber          string                     `json:"rt4_customerNumber" sign:"1"`                     // 智付分配的商户号
 	OrderId                 string                     `json:"rt5_orderId" sign:"1"`                            // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	RefundOrderNum          string                     `json:"rt6_refundOrderNum" sign:"1"`                     // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber            string                     `json:"rt7_serialNumber,omitempty" sign:"1"`             // 合利宝平台唯一流水号
+	SerialNumber            string                     `json:"rt7_serialNumber,omitempty" sign:"1"`             // 智付平台唯一流水号
 	OrderStatus             string                     `json:"rt8_orderStatus" sign:"1"`                        // 订单状态,BEFORERECEIVE:等待处理,RECEIVE:接收成功,INIT:初始化,DOING:处理中,SUCCESS:成功,FAIL:失败,CLOSE:关闭
 	Amount                  string                     `json:"rt9_amount" sign:"1"`                             // 退款金额,以元为单位,最小金额为0.01
 	Currency                string                     `json:"rt10_currency,omitempty" sign:"1"`                // 币种类型,CNY:人民币
@@ -441,9 +441,9 @@ type AppPayOrderRefundQueryRes struct {
 
 // OrderPayResultNotifyReq 订单支付结果异步通知
 type OrderPayResultNotifyReq struct {
-	CustomerNumber          string                       `json:"rt1_customerNumber" sign:"1"`                   // 合利宝分配的商户号
+	CustomerNumber          string                       `json:"rt1_customerNumber" sign:"1"`                   // 智付分配的商户号
 	OrderId                 string                       `json:"rt2_orderId" sign:"1"`                          // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SystemSerial            string                       `json:"rt3_systemSerial,omitempty" sign:"1"`           // 合利宝系统唯一支付流水号
+	SystemSerial            string                       `json:"rt3_systemSerial,omitempty" sign:"1"`           // 智付系统唯一支付流水号
 	Status                  string                       `json:"rt4_status" sign:"1"`                           // 订单状态,INIT:已接收,DOING:处理中,SUCCESS:成功,FAIL:失败,CLOSE:关闭,CANCEL:撤销
 	OrderAmount             float64                      `json:"rt5_orderAmount,string" sign:"1"`               // 订单金额,以元为单位,最小金额为0.01
 	Currency                string                       `json:"rt6_currency" sign:"1"`                         // 币种,CNY:人民币
@@ -485,10 +485,10 @@ type OrderPayResultNotifyReq struct {
 
 // OrderRefundResultNotifyReq 订单退款结果异步通知
 type OrderRefundResultNotifyReq struct {
-	CustomerNumber          string                     `json:"rt1_customerNumber" sign:"1"`                    // 合利宝分配的商户号
+	CustomerNumber          string                     `json:"rt1_customerNumber" sign:"1"`                    // 智付分配的商户号
 	OrderId                 string                     `json:"rt2_orderId" sign:"1"`                           // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	RefundOrderNum          string                     `json:"rt3_refundOrderNum" sign:"1"`                    // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	SerialNumber            string                     `json:"rt4_serialNumber,omitempty" sign:"1"`            // 合利宝平台唯一流水号
+	SerialNumber            string                     `json:"rt4_serialNumber,omitempty" sign:"1"`            // 智付平台唯一流水号
 	Status                  string                     `json:"rt5_status" sign:"1"`                            // 订单状态,INIT:初始化,DOING:处理中,SUCCESS:成功,FAIL:失败,CLOSE:关闭
 	Amount                  float64                    `json:"rt6_amount,string" sign:"1"`                     // 退款金额,以元为单位,最小金额为0.01
 	Currency                string                     `json:"rt7_currency,omitempty" sign:"1"`                // 币种类型,CNY:人民币
@@ -525,6 +525,6 @@ type MerchantRiskNotifyReq struct {
 
 type MerchantRiskNotifyInfo struct {
 	Ids        []int64 `json:"ids"`        // 风控的报备id
-	MerchantNo string  `json:"merchantNo"` // 涉及的合利宝商户号或子商户号
+	MerchantNo string  `json:"merchantNo"` // 涉及的智付商户号或子商户号
 	SigName    string  `json:"sigName"`    // 涉及的商户或子商户签约名
 }

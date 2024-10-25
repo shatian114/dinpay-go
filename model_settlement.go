@@ -40,7 +40,7 @@ type MerchantBalanceQueryRes struct {
 type MerchantSettlementReq struct {
 	BizType        string  `json:"P1_bizType" sign:"1"`             // 接口类型 商户结算接口
 	OrderId        string  `json:"P2_orderId" sign:"1"`             // 商户订单号 商户系统内部订单号，要求40字符以内，同一商户号下订单号唯一
-	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`      // 合利宝分配商户号
+	CustomerNumber string  `json:"P3_customerNumber" sign:"1"`      // 智付分配商户号
 	Amount         float64 `json:"P4_amount" sign:"1"`              // 金额 金额单位为元，最少值5
 	Summary        string  `json:"P5_summary,omitempty" sign:"1"`   // 结算备注
 	NotifyUrl      string  `json:"P6_notifyUrl,omitempty" sign:"0"` // 结算结果通知地址。
@@ -51,7 +51,7 @@ type MerchantSettlementRes struct {
 	BizType        string `json:"rt1_bizType" sign:"1"`          // 接口类型 商户结算接口
 	RetCode        string `json:"rt2_retCode" sign:"1"`          // 返回码
 	RetMsg         string `json:"rt3_retMsg,omitempty" sign:"0"` // 返回信息
-	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`   // 商户商编 合利宝分配商户号
+	CustomerNumber string `json:"rt4_customerNumber" sign:"1"`   // 商户商编 智付分配商户号
 	OrderId        string `json:"rt5_orderId" sign:"1"`          // 商户订单号 商户系统内部订单号，要求40字符以内，同一商户号下订单号唯一
 	Sign           string `json:"sign" sign:"0"`                 // SM3WITHSM2 签名结果
 }
@@ -60,7 +60,7 @@ type MerchantSettlementRes struct {
 type MerchantSettlementQueryReq struct {
 	BizType        string `json:"P1_bizType" sign:"1"`           // 接口类型 单笔结算查询
 	OrderId        string `json:"P2_orderId,omitempty" sign:"1"` // 商户订单号 商户系统内部订单号，要求40字符以内，同一商户号下订单号唯一
-	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 合利宝分配商户号
+	CustomerNumber string `json:"P3_customerNumber" sign:"1"`    // 智付分配商户号
 	SettleDate     string `json:"P4_settleDate" sign:"1"`        // 结算日期 通常都是查前一个工作日
 }
 
@@ -98,6 +98,6 @@ type MerchantSettlementResultNotifyReq struct {
 	RetCode           string                     `json:"rt2_retCode" sign:"1"`        // 返回码
 	RetMsg            string                     `json:"rt3_retMsg" sign:"0"`         // 返回信息
 	SettleRecords     []MerchantSettlementRecord `json:"rt4_settleRecords,omitempty"` // 结算记录
-	Rt5CustomerNumber string                     `json:"rt5_customerNumber"`          // 合利宝分配商户号
+	Rt5CustomerNumber string                     `json:"rt5_customerNumber"`          // 智付分配商户号
 	Sign              string                     `json:"sign"`                        // SM3WITHSM2 签名结果
 }

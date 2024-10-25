@@ -11,7 +11,7 @@ type BaseMerchantRes[T any] struct {
 
 // MerchantInfoQueryReq 商户信息查询
 type MerchantInfoQueryReq struct {
-	FirstClassMerchantNo string `json:"firstClassMerchantNo"` // 平台商商编,合利宝下发的,以C开头的商户编号
+	FirstClassMerchantNo string `json:"firstClassMerchantNo"` // 平台商商编,智付下发的,以C开头的商户编号
 	MerchantNo           string `json:"merchantNo"`           // 子商户号
 }
 
@@ -47,7 +47,7 @@ type MerchantInfoQueryRes struct {
 
 // MerchantRegisterReq 商户进件
 type MerchantRegisterReq struct {
-	FirstClassMerchantNo     string   `json:"firstClassMerchantNo"`             // 平台商商编,合利宝下发的,以C开头的商户编号
+	FirstClassMerchantNo     string   `json:"firstClassMerchantNo"`             // 平台商商编,智付下发的,以C开头的商户编号
 	OrderNo                  string   `json:"orderNo"`                          // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
 	SignName                 string   `json:"signName"`                         // 子商户签约名,营业执照上的工商注册名称(个人商户除外),注:1.个人商户请传“商户_个人姓名”;签约名至少为5个字,不能超过150个字
 	ShowName                 string   `json:"showName"`                         // 展示名,用于收银台的展示名,进件测试的可在展示名中添加“测试”字样; 注意:展示名长度不能小于2大于20
@@ -128,7 +128,7 @@ type MerchantRegisterRes struct {
 // MerchantRegisterQueryReq 商户进件查询
 type MerchantRegisterQueryReq struct {
 	OrderNo              string `json:"orderNo"`              // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	FirstClassMerchantNo string `json:"firstClassMerchantNo"` // 平台商商编,合利宝下发的,以C开头的商户编号
+	FirstClassMerchantNo string `json:"firstClassMerchantNo"` // 平台商商编,智付下发的,以C开头的商户编号
 }
 
 // MerchantRegisterQueryRes 商户进件查询

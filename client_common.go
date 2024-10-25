@@ -87,8 +87,12 @@ func (t *Client) appPayPost(body any) (response *req.Response, err error) {
 		signVals = append(signVals, valStr)
 	}
 	_, _ = jsonNode.Set("sign", ast.NewString(t.MD5Sign(signVals, t.scanSignKey)))
-	bodyMap, _ := jsonNode.Map()
-	if response, err = t.reqClient.R().SetFormDataAnyType(bodyMap).Post(t.getApiUrl(path)); err != nil {
+	bodyMap := make(map[string]string)
+	nodeMap, _ := jsonNode.MapUseNode()
+	for key, node := range nodeMap {
+		bodyMap[key], _ = node.String()
+	}
+	if response, err = t.reqClient.R().SetFormData(bodyMap).Post(t.getApiUrl(path)); err != nil {
 		return nil, err
 	}
 	return
@@ -122,8 +126,12 @@ func (t *Client) settlementPost(body any) (response *req.Response, err error) {
 	signValsBytes := []byte(strings.Join(append(signVals, "SM3WITHSM2"), "&"))
 	_, _ = jsonNode.Set("signType", ast.NewString("SM3WITHSM2"))
 	_, _ = jsonNode.Set("sign", ast.NewString(t.SM3WithSM2Sign(signValsBytes, t.settlementSignKey)))
-	bodyMap, _ := jsonNode.Map()
-	if response, err = t.reqClient.R().SetFormDataAnyType(bodyMap).Post(t.getApiUrl(path)); err != nil {
+	bodyMap := make(map[string]string)
+	nodeMap, _ := jsonNode.MapUseNode()
+	for key, node := range nodeMap {
+		bodyMap[key], _ = node.String()
+	}
+	if response, err = t.reqClient.R().SetFormData(bodyMap).Post(t.getApiUrl(path)); err != nil {
 		return nil, err
 	}
 	return

@@ -53,7 +53,7 @@ type MerchantWxpayAppApplyQueryRes struct {
 
 // MerchantAddAuthPayDirsDevConfigReq 商户微信公众号/小程序授权目录配置接口(单独增加单个支付目录)
 type MerchantAddAuthPayDirsDevConfigReq struct {
-	MerchantNo    string `json:"merchantNo"`          // 子商户编号 进件审核通过后才有的合利宝子商户号
+	MerchantNo    string `json:"merchantNo"`          // 子商户编号 进件审核通过后才有的智付子商户号
 	SubMerchantNo string `json:"subMerchantNo"`       // 微信子商户号 在微信报备的子商户号
 	AuthPayDir    string `json:"authPayDir"`          // 支付授权目录 支付授权目录列表（url必须以斜杆结尾, 格式参考微信公众号文档https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_3）
 	OrderNo       string `json:"orderNo"`             // 请求单号
@@ -62,7 +62,7 @@ type MerchantAddAuthPayDirsDevConfigReq struct {
 
 // MerchantAddAuthPayDirsDevConfigRes 商户微信公众号/小程序授权目录配置接口(单独增加单个支付目录)
 type MerchantAddAuthPayDirsDevConfigRes struct {
-	MerchantNo               string `json:"merchantNo"`                         // 合利宝子商户编号
+	MerchantNo               string `json:"merchantNo"`                         // 智付子商户编号
 	OrderNo                  string `json:"orderNo"`                            // 请求单号
 	Status                   string `json:"status"`                             // 状态
 	WxPublicConfigChannelMsg string `json:"wxPublicConfigChannelMsg,omitempty"` // 结果，仅在status为'FAIL'时返回

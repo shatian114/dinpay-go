@@ -28,7 +28,7 @@ type AccountPayParametersOrderParameters struct {
 	PayOrderNo         string                `json:"payOrderNo,omitempty"`     // 原订单商户订单号,当orderType值为ALLOWANCE时,此字段必填
 	IsGuarantee        string                `json:"isGuarantee,omitempty"`    // 担保交易标识,当orderType值为TRANSFER时,此字段可填写;true:需要担保。交易不会直接成功,资金临时冻结直到完成担保确认,false:不需要担保,交易直接完成
 	SplitRules         []AccountPaySplitRule `json:"splitRules,omitempty"`     // 收款分账规则,当orderType值为TRANSFER时,此字段可填写;若用于支持多个收款方,此时请求的recordedMerchantId、payAmount字段值可不填写。
-	FeeUndertaker      string                `json:"feeUndertaker,omitempty"`  // 手续费承担方向,PAYER:表示付款方承担;RECEIVER:收款方承担:如需平台商手续费账户承担,请联系合利宝人员后台配置
+	FeeUndertaker      string                `json:"feeUndertaker,omitempty"`  // 手续费承担方向,PAYER:表示付款方承担;RECEIVER:收款方承担:如需平台商手续费账户承担,请联系智付人员后台配置
 	NotifyUrl          string                `json:"notifyUrl,omitempty"`      // 后台通知地址,订单完成支付之后,异步通知商户支付结果;若此字段填写则值不能为 null
 }
 
