@@ -1,241 +1,164 @@
 package dinpay
 
 import (
+	"bytes"
 	"errors"
 	"github.com/bytedance/sonic"
-	"github.com/imroc/req/v3"
+	"io"
+	"net/http"
 )
 
-// AppPayScanOrder 扫码(主扫,用户扫商户)/刷卡(被扫,商户扫用户)下单
-func (t *Client) AppPayScanOrder(reqBody AppPayScanOrderReq) (res *AppPayScanOrderRes, err error) {
-	reqBody.BizType = "AppPay"
-	if reqBody.MarketingRule != nil {
-		reqBody.MarketingRuleJson, _ = sonic.MarshalString(reqBody.MarketingRule)
-		reqBody.MarketingRuleJson = t.Des3Encrypt([]byte(reqBody.MarketingRuleJson), t.scanEncryptKey)
+// AppPayScanOrder 主扫:用户扫商户/被扫:商户扫用户 下单
+func (t *Client) AppPayScanOrder(reqBody AppPayScanOrderReq) (res *BaseRes[AppPayScanOrderRes], err error) {
+	const path = "/trx/api/appPay/pay"
+	reqBody.InterfaceName = "AppPay"
+	if reqBody.MarketingRules != nil {
+		reqBody.MarketingRulesJson, _ = sonic.MarshalString(reqBody.MarketingRules)
 	}
-	reqBody.SplitBillType = ""
+	reqBody.SplitType = ""
 	if len(reqBody.SplitRules) >= 1 {
-		reqBody.SplitBillType = "FIXED_AMOUNT"
-		reqBody.SplitRuleJson, _ = sonic.MarshalString(reqBody.SplitRules)
-		reqBody.SplitRuleJson = t.Des3Encrypt([]byte(reqBody.SplitRuleJson), t.scanEncryptKey)
+		reqBody.SplitType = "FIXED_AMOUNT"
+		reqBody.SplitRulesJson, _ = sonic.MarshalString(reqBody.SplitRules)
 	}
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
-		return nil, err
-	}
-	res = new(AppPayScanOrderRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return
-	} else if res.RetCode != "0000" {
-		return res, err
 	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
+	return ParseRes[AppPayScanOrderRes](baseRes)
 }
 
 // AppPayPublicPreOrder 公众号/JS/服务窗预下单
-func (t *Client) AppPayPublicPreOrder(reqBody AppPayPublicPreOrderReq) (res *AppPayPublicPreOrderRes, err error) {
-	reqBody.BizType, reqBody.PayType = "AppPayPublic", "PUBLIC"
-	if reqBody.MarketingRule != nil {
-		reqBody.MarketingRuleJson, _ = sonic.MarshalString(reqBody.MarketingRule)
-		reqBody.MarketingRuleJson = t.Des3Encrypt([]byte(reqBody.MarketingRuleJson), t.scanEncryptKey)
+func (t *Client) AppPayPublicPreOrder(reqBody AppPayPublicPreOrderReq) (res *BaseRes[AppPayPublicPreOrderRes], err error) {
+	const path = "/trx/api/appPay/payPublic"
+	reqBody.InterfaceName, reqBody.PaymentMethods = "AppPayPublic", "PUBLIC"
+	if reqBody.MarketingRules != nil {
+		reqBody.MarketingRulesJson, _ = sonic.MarshalString(reqBody.MarketingRules)
 	}
-	reqBody.SplitBillType = ""
+	reqBody.SplitType = ""
 	if len(reqBody.SplitRules) >= 1 {
-		reqBody.SplitBillType = "FIXED_AMOUNT"
-		reqBody.SplitRuleJson, _ = sonic.MarshalString(reqBody.SplitRules)
-		reqBody.SplitRuleJson = t.Des3Encrypt([]byte(reqBody.SplitRuleJson), t.scanEncryptKey)
+		reqBody.SplitType = "FIXED_AMOUNT"
+		reqBody.SplitRulesJson, _ = sonic.MarshalString(reqBody.SplitRules)
 	}
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return nil, err
 	}
-	res = new(AppPayPublicPreOrderRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
+	return ParseRes[AppPayPublicPreOrderRes](baseRes)
+}
+
+// AppPayWapPreOrder WAP(H5)预下单
+func (t *Client) AppPayWapPreOrder(reqBody AppPayWapPreOrderReq) (res *BaseRes[AppPayWapPreOrderRes], err error) {
+	const path = "/trx/api/appPay/payH5"
+	reqBody.InterfaceName, reqBody.PaymentMethods = "AppPayH5WFT", "WAP"
+	if reqBody.MarketingRules != nil {
+		reqBody.MarketingRulesJson, _ = sonic.MarshalString(reqBody.MarketingRules)
 	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
+	reqBody.SplitType = ""
+	if len(reqBody.SplitRules) >= 1 {
+		reqBody.SplitType = "FIXED_AMOUNT"
+		reqBody.SplitRulesJson, _ = sonic.MarshalString(reqBody.SplitRules)
 	}
-	return
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
+		return nil, err
+	}
+	return ParseRes[AppPayWapPreOrderRes](baseRes)
+}
+
+// AppPaySdkPreOrder SDK(APP)预下单接口
+func (t *Client) AppPaySdkPreOrder(reqBody AppPaySdkPreOrderReq) (res *BaseRes[AppPaySdkPreOrderRes], err error) {
+	const path = "/trx/api/appPay/paySdk"
+	reqBody.InterfaceName, reqBody.PaymentMethods = "AppPaySdk", "SDK"
+	if reqBody.MarketingRules != nil {
+		reqBody.MarketingRulesJson, _ = sonic.MarshalString(reqBody.MarketingRules)
+	}
+	reqBody.SplitType = ""
+	if len(reqBody.SplitRules) >= 1 {
+		reqBody.SplitType = "FIXED_AMOUNT"
+		reqBody.SplitRulesJson, _ = sonic.MarshalString(reqBody.SplitRules)
+	}
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
+		return nil, err
+	}
+	return ParseRes[AppPaySdkPreOrderRes](baseRes)
 }
 
 // AppPayAppletPreOrder 小程序预下单
-func (t *Client) AppPayAppletPreOrder(reqBody AppPayAppletPreOrderReq) (res *AppPayAppletPreOrderRes, err error) {
-	reqBody.BizType, reqBody.PayType = "AppPayApplet", "APPLET"
-	if reqBody.MarketingRule != nil {
-		reqBody.MarketingRuleJson, _ = sonic.MarshalString(reqBody.MarketingRule)
-		reqBody.MarketingRuleJson = t.Des3Encrypt([]byte(reqBody.MarketingRuleJson), t.scanEncryptKey)
+func (t *Client) AppPayAppletPreOrder(reqBody AppPayAppletPreOrderReq) (res *BaseRes[AppPayAppletPreOrderRes], err error) {
+	const path = "/trx/api/appPay/payApplet"
+	reqBody.InterfaceName, reqBody.PaymentMethods = "AppPayApplet", "APPLET"
+	if reqBody.MarketingRules != nil {
+		reqBody.MarketingRulesJson, _ = sonic.MarshalString(reqBody.MarketingRules)
 	}
-	reqBody.SplitBillType = ""
+	reqBody.SplitType = ""
 	if len(reqBody.SplitRules) >= 1 {
-		reqBody.SplitBillType = "FIXED_AMOUNT"
-		reqBody.SplitRuleJson, _ = sonic.MarshalString(reqBody.SplitRules)
-		reqBody.SplitRuleJson = t.Des3Encrypt([]byte(reqBody.SplitRuleJson), t.scanEncryptKey)
+		reqBody.SplitType = "FIXED_AMOUNT"
+		reqBody.SplitRulesJson, _ = sonic.MarshalString(reqBody.SplitRules)
 	}
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return nil, err
 	}
-	res = new(AppPayAppletPreOrderRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
-}
-
-// AppPayOrderClose 交易订单关闭
-func (t *Client) AppPayOrderClose(reqBody AppPayOrderCloseReq) (res *AppPayOrderCloseRes, err error) {
-	reqBody.BizType = "AppPayClose"
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
-		return nil, err
-	}
-	res = new(AppPayOrderCloseRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
-}
-
-// AppPayOrderCancel 交易订单撤销
-func (t *Client) AppPayOrderCancel(reqBody AppPayOrderCancelReq) (res *AppPayOrderCancelRes, err error) {
-	reqBody.BizType = "AppPayCancel"
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
-		return nil, err
-	}
-	res = new(AppPayOrderCancelRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
+	return ParseRes[AppPayAppletPreOrderRes](baseRes)
 }
 
 // AppPayOrderQuery 交易订单查询
-func (t *Client) AppPayOrderQuery(reqBody AppPayOrderQueryReq) (res *AppPayOrderQueryRes, err error) {
-	reqBody.BizType = "AppPayQuery"
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
+func (t *Client) AppPayOrderQuery(reqBody AppPayOrderQueryReq) (res *BaseRes[AppPayOrderQueryRes], err error) {
+	const path = "/trx/api/appPay/payQuery"
+	reqBody.InterfaceName = "AppPayQuery"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return nil, err
 	}
-	res = new(AppPayOrderQueryRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
+	res, err = ParseRes[AppPayOrderQueryRes](baseRes)
+	if err != nil {
+		return nil, err
 	}
-	if len(res.MarketingRuleJson) > 0 {
-		bytes := t.Des3dDecrypt(res.MarketingRuleJson, t.scanEncryptKey)
-		if err = sonic.Unmarshal(bytes, res.MarketingRule); err != nil {
+	if len(res.Data.MarketingRulesJson) > 0 {
+		if err = sonic.Unmarshal([]byte(res.Data.MarketingRulesJson), res.Data.MarketingRules); err != nil {
 			return nil, err
 		}
 	}
-	if len(res.SplitRuleJson) > 0 {
-		if err = sonic.Unmarshal([]byte(res.SplitRuleJson), &res.SplitRules); err != nil {
+	if len(res.Data.SplitRulesJson) > 0 {
+		if err = sonic.Unmarshal([]byte(res.Data.SplitRulesJson), &res.Data.SplitRules); err != nil {
 			return nil, err
 		}
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
-}
-
-// AppPayOrderRefund 交易订单退款
-func (t *Client) AppPayOrderRefund(reqBody AppPayOrderRefundReq) (res *AppPayOrderRefundRes, err error) {
-	reqBody.BizType = "AppPayRefund"
-	if len(reqBody.SplitRules) >= 1 {
-		reqBody.SplitRuleJson, _ = sonic.MarshalString(reqBody.SplitRules)
-		reqBody.SplitRuleJson = t.Des3Encrypt([]byte(reqBody.SplitRuleJson), t.scanEncryptKey)
-	}
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
-		return nil, err
-	}
-	res = new(AppPayOrderRefundRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	return
-}
-
-// AppPayOrderRefundQuery 交易订单退款查询
-func (t *Client) AppPayOrderRefundQuery(reqBody AppPayOrderRefundQueryReq) (res *AppPayOrderRefundQueryRes, err error) {
-	reqBody.BizType = "AppPayRefundQuery"
-	var response *req.Response
-	if response, err = t.appPayPost(reqBody); err != nil {
-		return nil, err
-	}
-	res = new(AppPayOrderRefundQueryRes)
-	if err = sonic.Unmarshal(response.Bytes(), res); err != nil {
-		return
-	} else if res.RetCode != "0000" {
-		return res, err
-	}
-	if len(res.RefundMarketingRuleJson) > 0 {
-		bytes := t.Des3dDecrypt(res.RefundMarketingRuleJson, t.scanEncryptKey)
-		if err = sonic.Unmarshal(bytes, res.RefundMarketingRule); err != nil {
-			return nil, err
-		}
-	}
-	signVals := t.getSignValBySignTag(res, response.Bytes())
-	if res.Sign != t.MD5Sign(signVals, t.scanSignKey) {
-		err = errors.New("响应内容验签失败")
 	}
 	return
 }
 
 // OrderPayResultNotifyVerify 订单支付结果异步通知验签
-func (t *Client) OrderPayResultNotifyVerify(reqBody OrderPayResultNotifyReq, rowBytes []byte) bool {
-	if len(reqBody.MarketingRuleJson) > 0 {
-		bytes := t.Des3dDecrypt(reqBody.MarketingRuleJson, t.scanEncryptKey)
-		_ = sonic.Unmarshal(bytes, reqBody.MarketingRule)
+func (t *Client) OrderPayResultNotifyVerify(httpBody []byte) (notifyReq *OrderPayResultNotifyReq, err error) {
+	reqReq := http.Request{Method: "POST", Body: io.NopCloser(bytes.NewBuffer(httpBody)), Header: http.Header{}}
+	reqReq.Header.Set(`Content-Type`, `application/x-www-form-urlencoded`)
+	if err = reqReq.ParseForm(); err != nil {
+		return nil, err
 	}
-	if len(reqBody.SplitRuleJson) > 0 {
-		_ = sonic.Unmarshal([]byte(reqBody.SplitRuleJson), &reqBody.SplitRules)
+	if !t.SM3WithSM2Verify([]byte(reqReq.Form.Get("data")), reqReq.Form.Get("sign")) {
+		return nil, errors.New("响应内容验签失败")
 	}
-	signVals := t.getSignValBySignTag(reqBody, rowBytes)
-	return reqBody.Sign == t.MD5Sign(signVals, t.scanSignKey)
-}
+	httpBodyMap := make(map[string]string, len(reqReq.Form))
+	for key, strings := range reqReq.Form {
+		httpBodyMap[key] = strings[0]
+	}
+	httpBody, err = sonic.Marshal(httpBodyMap)
+	if err != nil {
+		return nil, err
+	}
 
-// OrderPayRefundNotifyVerify 订单退款结果异步通知验签
-func (t *Client) OrderPayRefundNotifyVerify(reqBody OrderRefundResultNotifyReq, rowBytes []byte) bool {
-	if len(reqBody.RefundMarketingRuleJson) > 0 {
-		bytes := t.Des3dDecrypt(reqBody.RefundMarketingRuleJson, t.scanEncryptKey)
-		_ = sonic.Unmarshal(bytes, reqBody.RefundMarketingRule)
+	var baseRes *NotifyReq[string]
+	if err = sonic.Unmarshal(httpBody, &baseRes); err != nil {
+		return nil, err
 	}
-	signVals := t.getSignValBySignTag(reqBody, rowBytes)
-	return reqBody.Sign == t.MD5Sign(signVals, t.scanSignKey)
+	if notifyReq, err = ParseNotifyReq[OrderPayResultNotifyReqBody](baseRes); err != nil {
+		return nil, err
+	}
+	if len(notifyReq.Data.MarketingRulesJson) > 0 {
+		_ = sonic.Unmarshal([]byte(notifyReq.Data.MarketingRulesJson), &notifyReq.Data.MarketingRule)
+	}
+	if len(notifyReq.Data.SplitRulesJson) > 0 {
+		_ = sonic.Unmarshal([]byte(notifyReq.Data.SplitRulesJson), &notifyReq.Data.SplitRules)
+	}
+	return
 }

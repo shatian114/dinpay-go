@@ -1,12 +1,16 @@
 module github.com/cyjaysong/dinpay-go
 
-go 1.22
+go 1.22.0
+
+toolchain go1.23.4
 
 require (
 	github.com/bytedance/sonic v1.12.3
-	github.com/deatil/go-cryptobin v1.0.4020
+	github.com/deatil/go-cryptobin v1.0.5021
 	github.com/imroc/req/v3 v3.47.0
 	github.com/matoous/go-nanoid/v2 v2.1.0
+	github.com/shopspring/decimal v1.4.0
+	github.com/tjfoc/gmsm v1.4.1
 )
 
 require (
@@ -25,16 +29,15 @@ require (
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/quic-go v0.47.0 // indirect
 	github.com/refraction-networking/utls v1.6.7 // indirect
-	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	go.uber.org/mock v0.4.0 // indirect
 	golang.org/x/arch v0.9.0 // indirect
-	golang.org/x/crypto v0.28.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools v0.26.0 // indirect
 )

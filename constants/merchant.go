@@ -101,8 +101,8 @@ var (
 		"RATIO":  "比率收费",
 	}
 
-	// MerchantCategory 经营类别
-	MerchantCategory = map[string]string{
+	// BusinessCategory 经营类别
+	BusinessCategory = map[string]string{
 		"OFFLINE_RETAIL":                 "线下零售",
 		"FOOD_BEVERAGE":                  "餐饮/食品",
 		"TICKETING_TRAVEL":               "票务/旅游",
@@ -153,10 +153,10 @@ var (
 
 	// MerchantType 商户类型
 	MerchantType = map[string]string{
-		"ENTERPRISE":          "企业商户",
-		"INSTITUTION":         "事业单位商户",
+		"ENTERPRISE":          "企业",
+		"INSTITUTION":         "事业单位",
 		"INDIVIDUALBISS":      "个体工商户",
-		"PERSON":              "个人商户(小微商户)",
+		"PERSON":              "小微个人商户",
 		"SUBJECT_TYPE_OTHERS": "其他组织",
 	}
 
@@ -172,21 +172,21 @@ var (
 		"TOPUBLIC":  "对公",
 	}
 
-	//  结算类型
-	SettlementPeriod = map[string]string{
-		"T1": "T1",
-		"D0": "D0",
-		"D1": "D1",
+	// SettlementCycle 结算周期
+	SettlementCycle = map[string]string{
+		"T1": "工作日隔天结算",
+		"D0": "当日结算",
+		"D1": "自然日隔天结算",
 	}
 
-	// ProductEnumType 产品类型
-	ProductEnumType = map[string]string{
-		"APPPAY":         "扫码",
-		"TRANSFER":       "代付",
-		"ONLINE":         "网银",
-		"QUICKPAY":       "快捷",
-		"AUTHENTICATION": "鉴权",
-		"SETTLEMENT":     "结算",
+	// ProductType 产品类型
+	ProductType = map[string]string{
+		"APPPAY":      "扫码",
+		"QUICKPAY":    "快捷",
+		"PAYMENT":     "虚拟账户支付",
+		"ACCOUNT_PAY": "转账充值",
+		"SETTLEMENT":  "结算",
+		"TRANSFER":    "代付",
 	}
 
 	// OnlineBankType 账户属性
@@ -195,10 +195,17 @@ var (
 		"B2B": "对公",
 	}
 
-	// OnlineCardType 卡属性
-	OnlineCardType = map[string]string{
+	// CardType 卡类型
+	CardType = map[string]string{
 		"DEBIT":  "借记卡",
 		"CREDIT": "贷记卡",
+	}
+
+	// IntegralType 积分计费类型
+	IntegralType = map[string]string{
+		"DISCOUNTS": "优惠",
+		"STANDARD":  "标准",
+		"PUBLIC":    "公共",
 	}
 
 	// SettlementMode 结算方式
@@ -207,6 +214,7 @@ var (
 		"AUTO":    "自动结算",
 		"SELF":    "自主结算",
 	}
+
 	// ReportResult 报备结果
 	ReportResult = map[string]string{
 		"NOT_APPLY_YET": "尚未报备",
@@ -296,8 +304,8 @@ var (
 		"MERCHANT_ENTERPRISE_MEALS_COOPERATION":   "商户与企业团餐合作协议(支付宝)", // 报名支付宝未来校园团餐活动时必传
 	}
 
-	// CommissionMethod 产品手续费收取方式
-	CommissionMethod = map[string]string{
+	// CollectMethod 产品手续费收取方式
+	CollectMethod = map[string]string{
 		"FEEACCOUNT":      "从平台商手续费账户收取",
 		"OWN_CASHACCOUNT": "子商户资金账户",
 	}
@@ -310,6 +318,13 @@ var (
 
 	// CredentialFileStatus 资质文件url上传状态类型
 	CredentialFileStatus = map[string]string{
+		"FAIL":    "失败",
+		"SUCCESS": "成功",
+		"DOING":   "处理中",
+	}
+
+	// SplittingStatus 分账状态
+	SplittingStatus = map[string]string{
 		"FAIL":    "失败",
 		"SUCCESS": "成功",
 		"DOING":   "处理中",
@@ -335,16 +350,16 @@ var (
 		"ABNORMAL": "编辑中", // 处理中
 	}
 
-	// FeeRateMode 费率模式
-	FeeRateMode = map[string]string{
-		"DEFAULT": "默认模式", // 不分段
-		"RANGE":   "分段模式", // 注：1.商户计费模式若采用分段模式，那么此商户不允许切换到默认模式；2.开通分段费率，必须开通手续费账户，否则无法进行平台商补贴；
+	// FeeMode 费率模式
+	FeeMode = map[string]string{
+		"DEFAULT": "默认模式", // 按百分比
+		"RANGE":   "区间模式", // 区间固定金额， 注：1.商户计费模式若采用分段模式，那么此商户不允许切换到默认模式；2.开通分段费率，必须开通手续费账户，否则无法进行平台商补贴；
 	}
 
 	// SettleMode 结算模式
 	SettleMode = map[string]string{
-		"MERCHANT": "按商户结算，正常结算",
-		"MERGE":    "按结算人结算，支持同平台商下，结算卡号一致的结算单合并成一笔出款",
+		"MERCHANT": "商户结算，按商户号维度结算",
+		"MERGE":    "合并结算，按结算人结算，支持同服务商下，结算卡号一致的结算单合并成一笔出款",
 	}
 
 	// PosActiveStatus POS产品开通状态
@@ -362,9 +377,10 @@ var (
 		"NOT_UPLOADED": "未上传",
 	}
 
-	// FeeRateType 费率类型
-	FeeRateType = map[string]string{
-		"DEFAULT":           "默认类型",
+	// FeeType 费率类型
+	FeeType = map[string]string{
+		"DEFAULT": "默认类型",
+		// 以下类型费率仅支持分段计费类型
 		"PUBLIC_WELFARE":    "公益类费率",
 		"PAYMENT":           "缴费类费率",
 		"ACADEMY":           "私立院校类",
@@ -373,6 +389,14 @@ var (
 		"SCHOOLCANTEEN_001": "高校食堂行业活动",
 		"EDUCATION_001":     "线下教培机构行业活动",
 		"BLUESEA_1":         "支付宝新蓝海活动",
+		"ALISCHOOL_1":       "支付宝未来校园活动",
+		"MEDICAL_0":         "医疗卫生活动",
+		"GOVERNMENT_0":      "政务组织活动",
+		"SCHOOLCANTEEN_002": "教育行业学校主体食堂活动",
+		"CAMPUSDINING_001":  "教育行业非学校主体商户餐饮活动",
+		"PARKING_001":       "停车缴费活动",
+		"HEALTHCARE_001":    "商业医疗行业活动",
+		"VIRTUAL":           "虚拟类",
 	}
 
 	// MerchantStatus 商户状态
@@ -399,12 +423,14 @@ var (
 		"FROZEN":        "冻结",
 		"NONE":          "未开通商户资金账户",
 	}
+
 	// MicroBizType 小微经营类型
 	MicroBizType = map[string]string{
 		"MICRO_TYPE_STORE":  "门店场所",
 		"MICRO_TYPE_MOBILE": "流动经营/便民服务",
 		"MICRO_TYPE_ONLINE": "线上商品/服务交易",
 	}
+
 	// CertType 证书类型
 	CertType = map[string]string{
 		"CERTIFICATE_TYPE_2388": "事业单位法人证书",
@@ -419,7 +445,7 @@ var (
 		"CERTIFICATE_TYPE_2397": "慈善组织公开募捐资格证书",
 		"CERTIFICATE_TYPE_2398": "农民专业合作社法人营业执照",
 		"CERTIFICATE_TYPE_2399": "宗教活动场所登记证",
-		"CERTIFICATE_TYPE_2400": "政府部门下发的其他有效证明文件",
+		"CERTIFICATE_TYPE_2400": "其他证书/批文/证明",
 	}
 
 	// AuthorizeStatus 授权状态
@@ -429,6 +455,7 @@ var (
 		"NOT_AUTHORIZED":  "未授权",
 		"AUTHORIZED_FAIL": "授权失败",
 	}
+
 	// ConfirmStatus 认证/绑定状态
 	ConfirmStatus = map[string]string{
 		"PRE_CONFIRM":         "待认证",
@@ -440,6 +467,7 @@ var (
 		"CONFIRM_CANCELED":    "已作废",
 		"CONFIRM_FREEZED":     "已冻结",
 	}
+
 	// IdType 身份证件类型
 	IdType = map[string]string{
 		"IDCARD":                    "身份证",
@@ -454,8 +482,8 @@ var (
 		"TAIWANRESIDENCEPERMIT":     "台湾居民证",
 	}
 
-	// SettleChangeType 结算到账方式
-	SettleChangeType = map[string]string{
+	// ArrivalMode 结算到账方式
+	ArrivalMode = map[string]string{
 		"NORMAL":     "银行卡",
 		"ELECTRONIC": "银行电子账户",
 	}
@@ -507,9 +535,15 @@ var (
 		"APPID_PATH_FAIL":                   "支付appId配置成功，授权目录配置失败",
 	}
 
-	// IdHolderType 证件持有人类型
-	IdHolderType = map[string]string{
+	// ContactType 联系人类型
+	ContactType = map[string]string{
 		"LEGAL": "经营者/法人",
 		"SUPER": "经办人",
+	}
+
+	// AlipayServiceCode 支付宝商户申请服务类型
+	AlipayServiceCode = map[string]string{
+		"F2F":     "当面付", // 对应线下
+		"PRE_F2F": "线下预授权",
 	}
 )

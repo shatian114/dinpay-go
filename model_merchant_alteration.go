@@ -1,254 +1,180 @@
 package dinpay
 
-// MerchantInfoModifyReq 商户信息修改
-type MerchantInfoModifyReq struct {
-	OrderNo          string            `json:"orderNo"`                    // 订单号 变更请求订单号
-	MerchantNo       string            `json:"merchantNo"`                 // 子商户编号
-	LegalPersonID    string            `json:"legalPersonID,omitempty"`    // 法人身份证号(需人工审核)
-	LegalPerson      string            `json:"legalPerson,omitempty"`      // 法人姓名(需人工审核)
-	BusinessLicense  string            `json:"businessLicense,omitempty"`  // 营业执照号(需人工审核)
-	SignName         string            `json:"signName,omitempty"`         // 签约名(需人工审核)
-	IDCardStartDate  string            `json:"idCardStartDate,omitempty"`  // 身份证有效期开始
-	IDCardEndDate    string            `json:"idCardEndDate,omitempty"`    // 身份证有效期结束
-	BusLiceStartDate string            `json:"busLiceStartDate,omitempty"` // 营业执照有效期开始
-	BusLiceEndDate   string            `json:"busLiceEndDate,omitempty"`   // 营业执照有效期结束
-	RegionCode       string            `json:"regionCode,omitempty"`       // 地区码
-	Address          string            `json:"address,omitempty"`          // 地址
-	MCC              string            `json:"mcc,omitempty"`              // mcc码
-	ShowName         string            `json:"showName,omitempty"`         // 商户简称
-	ServicePhone     string            `json:"servicePhone,omitempty"`     // 客服电话
-	LinkPhone        string            `json:"linkPhone,omitempty"`        // 联系电话
-	Linkman          string            `json:"linkman,omitempty"`          // 联系人
-	MerchantCategory string            `json:"merchantCategory,omitempty"` // 经营类别
-	IndustryTypeCode string            `json:"industryTypeCode,omitempty"` // 行业类型编码
-	MicroBizType     string            `json:"microBizType,omitempty"`     // 小微经营类型
-	CertType         string            `json:"certType,omitempty"`         // 证书类型
-	LinkManId        string            `json:"linkManId,omitempty"`        // 联系人证件号
-	SpecialSignName  string            `json:"specialSignName,omitempty"`  // 是否需要特殊处理商户名称
-	SynChannel       bool              `json:"synChannel,omitempty"`       // 是否同步通道到修改
-	AppPayType       string            `json:"appPayType,omitempty"`       // 支付类型
-	FileUrlMap       map[string]string `json:"fileUrlMap,omitempty"`       // 文件URL
-	FileSigns        map[string]string `json:"fileSigns,omitempty"`        // 文件签名列表
-	IDType           string            `json:"idType,omitempty"`           // 法人证件类型
-	ServiceCodes     string            `json:"serviceCodes,omitempty"`     // 支付宝商户服务类型
+import "github.com/imroc/req/v3"
+
+// MerchantModifyInfoReq 商户信息变更
+type MerchantModifyInfoReq struct {
+	InterfaceName               string                              `json:"interfaceName"`                    // 固定值:modifyMerchantInfo
+	ChangeOrderNo               string                              `json:"changeOrderNo"`                    // 订单号,变更请求订单号
+	MerchantId                  string                              `json:"subMerchantId"`                    // 子商户编号
+	BusinessLicense             string                              `json:"businessLicense,omitempty"`        // 营业执照号(需人工审核)
+	MerchantName                string                              `json:"merchantName,omitempty"`           // 商户名称(需人工审核)
+	MerchantShowName            string                              `json:"merchantShowName,omitempty"`       // 商户简称
+	BusinessLicenseType         string                              `json:"businessLicenseType,omitempty"`    // 营业证书类型,见常量 constants.CertType,默认为营业执照
+	ServicePhone                string                              `json:"servicePhone,omitempty"`           // 客服电话
+	MCC                         string                              `json:"mcc,omitempty"`                    // 银联MCC码
+	PaymentType                 string                              `json:"paymentType,omitempty"`            // 支付客户端类型,constants.PaymentType,ALL:微信支付宝报备记录都修改
+	IsChangeChannel             bool                                `json:"isChangeChannel"`                  // 是否同步通道到修改,需与支付客户端类型同时出现
+	BusinessCategory            string                              `json:"businessCategory"`                 // 经营类别,见常量 constants.BusinessCategory
+	CategoryId                  string                              `json:"categoryId"`                       // 商户经营子类,具体值见附件
+	MicroBizType                string                              `json:"microBizType,omitempty"`           // 小微经营类型,见常量 constants.MicroBizType,小微个人商户必填
+	IsChangeChannelIndustryType bool                                `json:"isChangeChannelIndustryType"`      // 是否同步修改微信侧行业类别
+	DistrictCode                string                              `json:"districtCode,omitempty"`           // 区县编码
+	Address                     string                              `json:"address,omitempty"`                // 地址
+	BusinessDateStart           string                              `json:"businessStartDate,omitempty"`      // 经营起始日期,yyyyMMdd,非个人商户必传
+	BusinessDateEnd             string                              `json:"businessEndDate,omitempty"`        // 经营结束日期,yyyyMMdd或者长期有效,非个人商户必传
+	LegalPerson                 string                              `json:"legalPerson,omitempty"`            // 法人姓名(需人工审核)
+	LegalPersonId               string                              `json:"legalPersonID,omitempty"`          // 法人身份证号(需人工审核)
+	LegalIdType                 string                              `json:"idType,omitempty"`                 // 法人证件类型,见常量 constants.IdType
+	LegalIdCardStartDate        string                              `json:"idCardStartDate,omitempty"`        // 法人身份证有效期开始,yyyyMMdd,开通微信产品必传
+	LegalIdCardEndDate          string                              `json:"idCardEndDate,omitempty"`          // 法人身份证有效期结束,yyyyMMdd或者长期有效,开通微信产品必传
+	LegalPersonIdAddress        string                              `json:"legalPersonIdAddress,omitempty"`   // 法人证件居住地址,企业商户必传
+	Contact                     string                              `json:"contact,omitempty"`                // 联系人名称
+	ContactId                   string                              `json:"contactId,omitempty"`              // 联系人证件号,开通微信产品必填
+	ContactIdType               string                              `json:"contactIdType,omitempty"`          // 联系人证件类型,见常量 constants.IdType
+	ContactType                 string                              `json:"contactType"`                      // 联系人类型,见常量 constants.ContactType,LEGAL:经营者/法人,SUPER:经办人
+	ContactPhone                string                              `json:"contactPhone,omitempty"`           // 联系电话
+	ContactIdCardStartDate      string                              `json:"contactIdCardStartDate,omitempty"` // 联系人证件有效期开始时间,yyyyMMdd,联系人类型为经办人时必填
+	ContactIdCardEndDate        string                              `json:"contactIdCardEndDate,omitempty"`   // 联系人证件有效期结束时间,yyyyMMdd或长期有效,联系人类型为经办人时必填
+	UboType                     bool                                `json:"uboType"`                          // 经营者/法人是否为受益人,企业商户必传
+	UboIdType                   string                              `json:"uboIdType,omitempty"`              // 受益人证件类型,受益人非经营者/法人类型时必传
+	UboIdName                   string                              `json:"uboIdName,omitempty"`              // 受益人证件姓名,受益人非经营者/法人类型时必传
+	UboId                       string                              `json:"uboId,omitempty"`                  // 受益人证件号码,受益人非经营者/法人类型时必传
+	UboAddress                  string                              `json:"uboAddress,omitempty"`             // 受益人证件居住地址,受益人非经营者/法人类型时必传
+	UboIdStartDate              string                              `json:"uboIdStartDate,omitempty"`         // 受益人证件有效期开始时间,yyyyMMdd,受益人非经营者/法人类型时必传
+	UboIdEndDate                string                              `json:"uboIdEndDate,omitempty"`           // 受益人证件有效期结束时间,yyyyMMdd或长期有效,受益人非经营者/法人类型时必传
+	ChangeSettleInfo            *MerchantModifyInfoChangeSettleInfo `json:"changeSettleInfo,omitempty"`       // 结算卡信息修改域
+	ServiceCodes                string                              `json:"serviceCodes,omitempty"`           // 支付宝商户服务类型,如:"[\"F2F\",\"PRE_F2F\"]",constants.AlipayServiceCode
+	SpecialSignName             bool                                `json:"specialSignName,omitempty"`        // 是否需要格式化商户名称,根据微信定义的签约名规则去报备,只有营业执照名字为“*”，或者个人商户才传true
+	FileUrlMap                  map[string]string                   `json:"imageUrlMap,omitempty"`            // 文件URL,constants.MerchantCredentialType
 }
 
-// MerchantInfoModifyRes 商户信息修改
-type MerchantInfoModifyRes struct {
-	OrderNo          string `json:"orderNo"`          // 变更请求的订单号
-	MerchantNo       string `json:"merchantNo"`       // 子商户编号
-	Result           string `json:"result"`           // 审核状态结果
-	AlterationStatus string `json:"alterationStatus"` // 审核状态
+// MerchantModifyInfoChangeSettleInfo
+// 1、结算账户指定书：变更开户人名称或结算卡号时必须上传
+// 2、持卡人身份证正面照：变更开户人名称或结算卡号时并且结算卡类型对私必须上传
+// 3、持卡人身份证反面照：变更开户人名称或结算卡号时并且结算卡类型对私必须上传
+// 4、持卡人手持身份证照：变更开户人名称或结算卡号时并且结算卡类型对私必须上传
+// 5、持卡人手持银行卡照：变更开户人名称或结算卡号时并且结算卡类型对私必须上传
+// 6、银行开户证明：变更开户人名称或结算卡号时并且结算卡类型对公必须上传
+// 7、转租证明：个体工商户变更开户人名称必须上传
+// 8、开户许可证：企业商户非同名变更对私变对公必须上传
+// 9、结算卡：企业商户非同名变更对公变更为非法人结算时必须上传需要将文件传到文件列表fileMap域中，并上传对应的文件签名
+type MerchantModifyInfoChangeSettleInfo struct {
+	CardName             string `json:"cardName"`                       // 开户人名称
+	ChangeCardName       string `json:"changeCardName,omitempty"`       // 变更后开户人名称,输入该字段需上传结算账户指定书
+	CardNo               string `json:"cardNo"`                         // 原结算卡号
+	ChangeCardNo         string `json:"changeCardNo,omitempty"`         // 变更后结算卡号
+	CardType             string `json:"cardType"`                       // 结算卡类型,constants.SettleBankType
+	ChangeCardType       string `json:"changeCardType,omitempty"`       // 变更后结算卡类型,constants.SettleBankType
+	BankBranchCode       string `json:"bankBranchCode"`                 // 结算卡联行号
+	ChangeBankBranchCode string `json:"changeBankBranchCode,omitempty"` // 变更后结算卡联行号
+	ChangeType           string `json:"changeType"`                     // 变更类型
+	CardIdCard           string `json:"cardIdCard,omitempty"`           // 结算人身份证号
+	CardIdCardStartDate  string `json:"cardIdCardStartDate,omitempty"`  // 结算人身份证开始日期,yyyyMMdd
+	CardIdCardEndDate    string `json:"cardIdCardEndDate,omitempty"`    // 结算人身份证结束日期,yyyyMMdd或者长期有效
+	SettlementMode       string `json:"settlementMode,omitempty"`       // 结算方式,constants.SettlementMode
+	ArrivalMode          string `json:"arrivalMode,omitempty"`          // 结算到账方式,constants.ArrivalMode
+	SettlementPhone      string `json:"settlementPhone,omitempty"`      // 结算人手机号
+	SettlementCycle      string `json:"settlementCycle,omitempty"`      // 结算周期类型,constants.SettlementCycle
+	SettleMode           string `json:"settleMode,omitempty"`           // 结算模式,constants.SettleMode
+	//SettlementCutTim          string `json:"settlementCutTim,omitempty"`          // 待定，是否保留定时结算模式
+	//SettleCutTimeEffectiveDat string `json:"settleCutTimeEffectiveDat,omitempty"` // 待定，是否保留定时结算模式
 }
 
-// MerchantAlterationReq 商户信息变更
-type MerchantAlterationReq struct {
-	OrderNo                     string `json:"orderNo"`                     // 订单号 变更请求订单号
-	MerchantNo                  string `json:"merchantNo"`                  // 子商户编号 子商户编号
-	MerchantEntryAlterationType string `json:"merchantEntryAlterationType"` // 变更类型 见附录5.18
-	UpdateShowName              string `json:"updateShowName"`              // 展示名
-	UpdateLinkPhone             string `json:"updateLinkPhone"`             // 客服电话
-	Linkman                     string `json:"linkman,omitempty"`           // 联系人 仅修改支付宝报备信息
-	LinkPhone                   string `json:"linkPhone,omitempty"`         // 联系电话（手机）仅修改支付宝报备信息
-	BusinessLicense             string `json:"businessLicense,omitempty"`   // 营业执照 仅修改支付宝报备信息
-	LegalPersonID               string `json:"legalPersonID,omitempty"`     // 身份证号 仅修改支付宝报备信息
-	Address                     string `json:"address,omitempty"`           // 地址 仅修改支付宝报备信息
-	MerchantCategory            string `json:"merchantCategory,omitempty"`  // 经营类别 线下零售 仅修改支付宝报备信息见附录5.5
-	RegionCode                  string `json:"regionCode,omitempty"`        // 区县编码 仅修改支付宝报备信息（如未传区县编码，则在省市信息中随机选取一个区县编码）
-	Province                    string `json:"province,omitempty"`          // 省 仅修改支付宝报备信息
-	City                        string `json:"city,omitempty"`              // 市 仅修改支付宝报备信息
+// MerchantModifyInfoRes 商户信息变更
+type MerchantModifyInfoRes struct {
+	ChangeOrderNo string `json:"changeOrderNo"` // 变更请求的订单号
+	MerchantId    string `json:"subMerchantId"` // 子商户编号
+	ChangeStatus  string `json:"changeStatus"`  // 审核状态,constants.AlterationStatus
+	ChangeMsg     string `json:"changeMsg"`     // 审核状态说明
 }
 
-// MerchantAlterationRes 商户信息变更
-type MerchantAlterationRes struct {
-	OrderNo          string `json:"orderNo"`                    // 订单号 变更请求的订单号
-	MerchantNo       string `json:"merchantNo"`                 // 子商户编号 子商户编号
-	Result           string `json:"result"`                     // 审核状态结果 见附录5.19
-	AlterationStatus string `json:"alterationStatus,omitempty"` // 审核状态 见附录5.19
+// MerchantModifyInfoQueryReq 商户信息变更查询
+type MerchantModifyInfoQueryReq struct {
+	InterfaceName string `json:"interfaceName"` // 固定值:changeOrderQuery
+	ChangeOrderNo string `json:"changeOrderNo"` // 订单号,变更请求订单号
+	MerchantId    string `json:"subMerchantId"` // 子商户编号
+	ChangeType    string `json:"changeType"`    // 变更类型,固定值:MERCHANT_INFO_SYN
 }
 
-// MerchantAlterationQueryReq 商户变更查询
-type MerchantAlterationQueryReq struct {
-	OrderNo                     string `json:"orderNo"`                     // 订单号 变更请求订单号
-	MerchantNo                  string `json:"merchantNo"`                  // 子商户编号 子商户编号
-	MerchantEntryAlterationType string `json:"merchantEntryAlterationType"` // 变更类型 见附录5.18
+// MerchantModifyInfoQueryRes 商户信息变更查询
+type MerchantModifyInfoQueryRes struct {
+	ChangeOrderNo string `json:"changeOrderNo"` // 变更请求的订单号
+	MerchantId    string `json:"subMerchantId"` // 子商户编号
+	ChangeStatus  string `json:"changeStatus"`  // 审核状态,constants.AlterationStatus
+	ChangeMsg     string `json:"changeMsg"`     // 审核状态说明
+	Msg           string `json:"msg,omitempty"` // 备注
 }
 
-// MerchantAlterationQueryRes 商户变更查询
-type MerchantAlterationQueryRes struct {
-	OrderNo          string `json:"orderNo"`          // 订单号 变更请求的订单号
-	MerchantNo       string `json:"merchantNo"`       // 子商户编号 子商户编号
-	Result           string `json:"result"`           // 审核状态结果 见附录5.19
-	AlterationStatus string `json:"alterationStatus"` // 审核状态 见附录5.19
-	Remark           string `json:"remark,omitempty"` // 备注
-
+// MerchantCredentialImageUploadReq 商户资质图片上传
+type MerchantCredentialImageUploadReq struct {
+	InterfaceName  string             `json:"interfaceName"`           // 固定值:imageUpload
+	OrderNo        string             `json:"orderNo,omitempty"`       // 商户入驻请求订单号,为入网待审核商户上传填写此参数
+	MerchantId     string             `json:"subMerchantId,omitempty"` // 子商户编号,为进件审核通过商户上传填写此参数
+	CredentialType string             `json:"credentialType"`          // 资质类型,constants.MerchantCredentialType
+	FileSign       string             `json:"fileSign"`                // 资质文件SM3 HASH
+	GetFileContent req.GetContentFunc `json:"-"`                       // 文件内容获取方法
 }
 
-// MerchantSettlementCardAlterationReq 商户结算卡信息变更
-type MerchantSettlementCardAlterationReq struct {
-	OrderNo                     string                                    `json:"orderNo"`                             // 订单号 变更请求订单号
-	MerchantNo                  string                                    `json:"merchantNo"`                          // 子商户编号 进件审核通过后才有的子商户编号
-	AccountName                 string                                    `json:"accountName"`                         // 开户人名称 开户人名称
-	UpdateAccountName           string                                    `json:"updateAccountName,omitempty"`         // 变更后开户人名称 变更后开户人名称，输入该字段需上传结算账户指定书
-	AccountNo                   string                                    `json:"accountNo"`                           // 原结算卡号 原结算卡号
-	UpdateAccountNo             string                                    `json:"updateAccountNo,omitempty"`           // 变更后结算卡号 变更后结算卡号
-	SettleBankType              string                                    `json:"settleBankType"`                      // 结算卡类型 见附录5.9
-	UpdateSettleBankType        string                                    `json:"updateSettleBankType,omitempty"`      // 变更后结算卡类型 见附录5.9
-	BankCode                    string                                    `json:"bankCode"`                            // 结算卡联行号 结算卡联行号
-	UpdateBankCode              string                                    `json:"updateBankCode,omitempty"`            // 变更后结算卡联行号 变更后结算卡联行号
-	MerchantEntryAlterationType string                                    `json:"merchantEntryAlterationType"`         // 变更类型 见附录5.18
-	FileSigns                   MerchantSettlementCardAlterationFileSigns `json:"fileSigns,omitempty"`                 // 文件 HASH 映射 参见以下关于结算卡变更接口文件Hash映射补充说明
-	SettlementIdCardStartDate   string                                    `json:"settlementIdCardStartDate,omitempty"` // 结算人身份证开始日期 yyyyMMdd
-	SettlementIdCardEndDate     string                                    `json:"settlementIdCardEndDate,omitempty"`   // 结算人身份证结束日期 yyyyMMdd 或者长期有效
-	SettlementIdCardNo          string                                    `json:"settlementIdCardNo,omitempty"`        // 结算人身份证号
-	SettlementMode              string                                    `json:"settlementMode,omitempty"`            // 结算方式 见附录5.15
-	ElectronicAccountNo         string                                    `json:"electronicAccountNo,omitempty"`       // 电子账户
-	SettleChangeType            string                                    `json:"settleChangeType,omitempty"`          // 结算到账方式 具体值见附录5.38
-	SettlementPhoneNo           string                                    `json:"settlementPhoneNo,omitempty"`         // 结算人手机号
-	SettlementPeriod            string                                    `json:"settlementPeriod,omitempty"`          // 结算周期类型 见附录5.10
-	SettleMode                  string                                    `json:"settleMode,omitempty"`                // 结算模式 商户合并结算使用，见附录 5.27[合并结算使用]
+// MerchantCredentialImageUrlUploadReq 商户资质图片Url上传
+type MerchantCredentialImageUrlUploadReq struct {
+	InterfaceName  string `json:"interfaceName"`           // 固定值:imageUrlUpload
+	OrderNo        string `json:"orderNo,omitempty"`       // 商户入驻请求订单号,为入网待审核商户上传填写此参数
+	MerchantId     string `json:"subMerchantId,omitempty"` // 子商户编号,为进件审核通过商户上传填写此参数
+	CredentialType string `json:"credentialType"`          // 资质类型,constants.MerchantCredentialType
+	CredentialUrl  string `json:"credentialUrl"`           // 资质文件url,资质文件地址
 }
 
-type MerchantSettlementCardAlterationFileSigns struct {
-	AuthorizationForSettlement string `json:"authorizationForSettlement,omitempty"` // 结算账户指定书上传时必填，文件 MD5 校验码
-	FrontOfIdCard              string `json:"frontOfIdCard,omitempty"`              // 持卡人身份证正面照上传时必填，文件 MD5 校验码
-	BackOfIdCard               string `json:"backOfIdCard,omitempty"`               // 持卡人身份证反面照上传时必填，文件 MD5 校验码
-	HandheldOfIdCard           string `json:"handheldOfIdCard,omitempty"`           // 持卡人手持身份证照上传时必填，文件 MD5 校验码
-	HandheldOfBankCard         string `json:"handheldOfBankCard,omitempty"`         // 持卡人手持银行卡照上传时必填，文件 MD5 校验码
-	AccountOpeningCertificate  string `json:"accountOpeningCertificate,omitempty"`  // 银行开户证明上传时必填，文件 MD5 校验码
-	SubleaseCertificate        string `json:"subleaseCertificate,omitempty"`        // 转租证明上传时必填，文件 MD5 校验码
-	PermitForBankAccount       string `json:"permitForBankAccount,omitempty"`       // 开户许可证上传时必填，文件 MD5 校验码
-	BankCard                   string `json:"bankCard,omitempty"`                   // 结算卡上传时必填，文件 MD5 校验码
+// MerchantCredentialImageUploadQueryReq 商户资质图片上传查询
+type MerchantCredentialImageUploadQueryReq struct {
+	InterfaceName  string `json:"interfaceName"`           // 固定值:imageUploadQuery或imageUrlUploadQuery
+	OrderNo        string `json:"orderNo,omitempty"`       // 商户入驻请求订单号,为入网待审核商户上传填写此参数
+	MerchantId     string `json:"subMerchantId,omitempty"` // 子商户编号,为进件审核通过商户上传填写此参数
+	CredentialType string `json:"credentialType"`          // 资质类型,constants.MerchantCredentialType
 }
 
-// MerchantSettlementCardAlterationRes 商户结算卡信息变更
-type MerchantSettlementCardAlterationRes struct {
-	OrderNo          string `json:"orderNo"`          // 订单号 变更请求订单号
-	MerchantNo       string `json:"merchantNo"`       // 子商户编号 进件审核通过后才有的子商户编号
-	Result           string `json:"result"`           // 审核状态结果
-	AlterationStatus string `json:"alterationStatus"` // 审核状态
+// MerchantCredentialImageUploadRes 商户资质图片上传
+type MerchantCredentialImageUploadRes struct {
+	OrderNo        string `json:"orderNo,omitempty"`       // 订单号,入网待审核商户才有此参数，跟商户入驻请求订单号一致
+	MerchantId     string `json:"subMerchantId,omitempty"` // 子商户编号,进件审核通过后才有商户号
+	CredentialType string `json:"credentialType"`          // 资质类型,constants.MerchantCredentialType
+	UploadStatus   string `json:"uploadStatus"`            // 上传结果,constants.UploadResult
+	Msg            string `json:"msg,omitempty"`           // 备注
 }
 
-// MerchantUploadCredentialReq 商户资质上传接口
-type MerchantUploadCredentialReq struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 进件审核通过后才有的商户号
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	CredentialType string `json:"credentialType"`       // 资质类型 见附录5.21
-	FileSign       string `json:"fileSign"`             // 资质文件 HASH 值 文件 MD5 校验码
+// MerchantCredentialImageChangeUploadReq 商户资质图片变更上传
+type MerchantCredentialImageChangeUploadReq struct {
+	InterfaceName  string             `json:"interfaceName"`  // 固定值:imageChangeUpload
+	ChangeOrderNo  string             `json:"changeOrderNo"`  // 订单号,变更请求订单号
+	MerchantId     string             `json:"subMerchantId"`  // 子商户编号
+	CredentialType string             `json:"credentialType"` // 资质类型,constants.MerchantCredentialType
+	ChangeType     string             `json:"changeType"`     // 变更类型,固定值:MERCHANT_CREDENTIAL
+	FileSign       string             `json:"fileSign"`       // 资质文件SM3 HASH
+	GetFileContent req.GetContentFunc `json:"-"`              // 文件内容获取方法
 }
 
-// MerchantUploadCredentialRes 商户资质上传接口
-type MerchantUploadCredentialRes struct {
-	MerchantNo       string `json:"merchantNo,omitempty"` // 子商户编号 (非必填)
-	OrderNo          string `json:"orderNo,omitempty"`    // 请求单号 (非必填)
-	CredentialType   string `json:"credentialType"`       // 资质类型 (必填) 见附录5.21
-	CredentialStatus string `json:"credentialStatus"`     // 上传结果 (必填) 见附录5.29
+// MerchantCredentialImageUrlChangeUploadReq 商户资质图片Url变更上传
+type MerchantCredentialImageUrlChangeUploadReq struct {
+	InterfaceName  string `json:"interfaceName"`  // 固定值:imageUrlChangeUpload
+	ChangeOrderNo  string `json:"changeOrderNo"`  // 订单号,变更请求订单号
+	MerchantId     string `json:"subMerchantId"`  // 子商户编号
+	CredentialType string `json:"credentialType"` // 资质类型,constants.MerchantCredentialType
+	ChangeUrl      string `json:"changeUrl"`      // 资质文件url
 }
 
-// MerchantUploadCredentialQueryReq 商户资质上传查询接口
-type MerchantUploadCredentialQueryReq struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 进件审核通过后才有的商户号
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	CredentialType string `json:"credentialType"`       // 资质类型 见附录5.21
+// MerchantCredentialImageChangeUploadQueryReq 商户资质图片变更上传查询
+type MerchantCredentialImageChangeUploadQueryReq struct {
+	InterfaceName string `json:"interfaceName"` // 固定值:changeOrderQuery
+	ChangeOrderNo string `json:"changeOrderNo"` // 订单号,变更请求订单号
+	MerchantId    string `json:"subMerchantId"` // 子商户编号
+	ChangeType    string `json:"changeType"`    // 变更类型,固定值:MERCHANT_CREDENTIAL
 }
 
-// MerchantUploadCredentialQueryRes 商户资质上传查询接口
-type MerchantUploadCredentialQueryRes struct {
-	MerchantNo       string `json:"merchantNo,omitempty"` // 子商户编号 (非必填)
-	OrderNo          string `json:"orderNo,omitempty"`    // 请求单号 (非必填)
-	CredentialType   string `json:"credentialType"`       // 资质类型 (必填) 见附录5.21
-	CredentialStatus string `json:"credentialStatus"`     // 上传结果 (必填) 见附录5.29
-}
-
-// MerchantUploadAlterationCredentialReq 商户资质变更上传接口
-type MerchantUploadAlterationCredentialReq struct {
-	OrderNo                     string `json:"orderNo,omitempty"`           // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	MerchantNo                  string `json:"merchantNo,omitempty"`        // 子商户编号 进件审核通过后才有的商户号
-	CredentialType              string `json:"credentialType"`              // 资质类型 见附录5.21
-	MerchantEntryAlterationType string `json:"merchantEntryAlterationType"` // 资质类型 见附录5.21
-	FileSign                    string `json:"fileSign"`                    // 资质文件HASH值,文件MD5校验码
-}
-
-// MerchantUploadAlterationCredentialRes 商户资质变更上传接口
-type MerchantUploadAlterationCredentialRes struct {
-	OrderNo          string `json:"orderNo"`          // 请求单号
-	MerchantNo       string `json:"merchantNo"`       // 子商户编号
-	Result           string `json:"result"`           // 审核状态结果,见附录5.19
-	AlterationStatus string `json:"alterationStatus"` // 审核状态,见附录5.19
-	EffectTime       string `json:"effectTime"`       // 生效时间,审核通过时间
-}
-
-// MerchantUploadCredentialUrlReq 商户资质Url上传接口
-type MerchantUploadCredentialUrlReq struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 进件审核通过后才有的商户号
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	CredentialType string `json:"credentialType"`       // 资质类型 见附录5.21
-	CredentialUrl  string `json:"credentialUrl"`        // 资质文件地址
-}
-
-// MerchantUploadCredentialUrlRes 商户资质Url上传接口
-type MerchantUploadCredentialUrlRes struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 (非必填)
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 (非必填)
-	CredentialType string `json:"credentialType"`       // 资质类型 (必填) 见附录5.21
-	Status         string `json:"status"`               // 上传结果 (必填) 见附录5.29
-}
-
-// MerchantUploadCredentialUrlQueryReq 商户资质Url上传查询接口
-type MerchantUploadCredentialUrlQueryReq struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 进件审核通过后才有的商户号
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	CredentialType string `json:"credentialType"`       // 资质类型 见附录5.21
-}
-
-// MerchantUploadCredentialUrlQueryRes 商户资质Url上传查询接口
-type MerchantUploadCredentialUrlQueryRes struct {
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 (非必填)
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 (非必填)
-	CredentialType string `json:"credentialType"`       // 资质类型 (必填) 见附录5.21
-	Status         string `json:"status"`               // 上传结果 (必填) 见附录5.29
-	Remark         string `json:"remark"`               // 备注信息
-}
-
-// MerchantUploadAlterationCredentialUrlReq 商户资质Url变更上传接口
-type MerchantUploadAlterationCredentialUrlReq struct {
-	OrderNo        string `json:"orderNo,omitempty"`    // 请求单号 此参数需与进件的orderNo一致，待审核商户才需填写此参数
-	MerchantNo     string `json:"merchantNo,omitempty"` // 子商户编号 进件审核通过后才有的商户号
-	CredentialType string `json:"credentialType"`       // 资质类型 见附录5.21
-	CredentialUrl  string `json:"credentialUrl"`        // 资质文件地址
-}
-
-// MerchantUploadAlterationCredentialUrlRes 商户资质Url变更上传接口
-type MerchantUploadAlterationCredentialUrlRes struct {
-	OrderNo        string `json:"orderNo"`        // 请求单号
-	MerchantNo     string `json:"merchantNo"`     // 子商户编号
-	CredentialType string `json:"credentialType"` // 资质类型 见附录5.21
-	Status         string `json:"status"`         // 上传结果 (必填) 见附录5.29
-}
-
-// MerchantModifyProductConfigReq 商户产品手续费收取方式修改接口
-type MerchantModifyProductConfigReq struct {
-	MerchantNo  string `json:"merchantNo"`  // 子商户编号
-	Type        string `json:"type"`        // 类型
-	ProductType string `json:"productType"` // 产品类型
-	Value       string `json:"value"`       // 收取方式
-}
-
-// MerchantModifyProductConfigRes 商户产品手续费收取方式修改接口
-type MerchantModifyProductConfigRes struct {
-	MerchantNo string `json:"merchantNo"` // 子商户编号
-	Status     string `json:"status"`     // SUCCESS:成功;FAIL:失败
-}
-
-// MerchantModifyProductConfigQueryReq 商户产品手续费收取方式查询接口
-type MerchantModifyProductConfigQueryReq struct {
-	MerchantNo  string `json:"merchantNo"`  // 子商户编号
-	Type        string `json:"type"`        // 类型
-	ProductType string `json:"productType"` // 产品类型
-}
-
-// MerchantModifyProductConfigQueryRes 商户产品手续费收取方式查询接口
-type MerchantModifyProductConfigQueryRes struct {
-	MerchantNo string `json:"merchantNo"` // 子商户编号
-	Value      string `json:"value"`      // 收取方式,交易手续费收取方式(自身资金账户、平台商手续费账号)
+// MerchantCredentialImageChangeUploadRes 商户资质图片变更上传查询
+type MerchantCredentialImageChangeUploadRes struct {
+	ChangeOrderNo string `json:"changeOrderNo"`        // 变更请求的订单号
+	MerchantId    string `json:"subMerchantId"`        // 子商户编号
+	ChangeStatus  string `json:"changeStatus"`         // 审核状态
+	ChangeMsg     string `json:"changeMsg"`            // 审核结果
+	ChangeTime    string `json:"changeTime,omitempty"` // 生效时间,审核通过时间
 }

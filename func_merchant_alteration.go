@@ -1,307 +1,100 @@
 package dinpay
 
-import (
-	"errors"
-	"github.com/bytedance/sonic"
-	"github.com/imroc/req/v3"
-)
-
-// MerchantInfoModify 商户信息变更V2
-func (t *Client) MerchantInfoModify(reqBody MerchantInfoModifyReq) (res *BaseMerchantRes[MerchantInfoModifyRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantUploadPost("modifyMerchantInfoV2", reqBody); err != nil {
-		return nil, err
+// MerchantModifyInfo 商户信息变更
+func (t *Client) MerchantModifyInfo(reqBody MerchantModifyInfoReq) (res *BaseRes[MerchantModifyInfoRes], err error) {
+	const path = "/trx/api/merchantEntryAlteration/modifyMerchantInfo"
+	reqBody.InterfaceName = "modifyMerchantInfo"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonMultipartFormPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantInfoModifyRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantModifyInfoRes](baseRes)
 }
 
-// MerchantAlteration 商户信息变更
-func (t *Client) MerchantAlteration(reqBody MerchantAlterationReq) (res *BaseMerchantRes[MerchantAlterationRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("infoAlteration", reqBody); err != nil {
-		return nil, err
+// MerchantModifyInfoQuery 商户信息变更查询
+func (t *Client) MerchantModifyInfoQuery(reqBody MerchantModifyInfoQueryReq) (res *BaseRes[MerchantModifyInfoQueryRes], err error) {
+	const path = "/trx/api/merchantCredential/changeOrderQuery"
+	reqBody.InterfaceName, reqBody.ChangeType = "changeOrderQuery", "MERCHANT_INFO_SYN"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantAlterationRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantModifyInfoQueryRes](baseRes)
 }
 
-// MerchantAlterationQuery 商户变更查询
-func (t *Client) MerchantAlterationQuery(reqBody MerchantAlterationQueryReq) (res *BaseMerchantRes[MerchantAlterationQueryRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("queryAlteration", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageUpload 商户资质图片上传
+func (t *Client) MerchantCredentialImageUpload(reqBody MerchantCredentialImageUploadReq) (res *BaseRes[MerchantCredentialImageUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageUpload"
+	reqBody.InterfaceName = "imageUpload"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.merchantImageFormUpload(path, reqBody, reqBody.CredentialType, reqBody.GetFileContent); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantAlterationQueryRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageUploadRes](baseRes)
 }
 
-// MerchantSettlementCardAlteration 商户结算卡信息变更
-func (t *Client) MerchantSettlementCardAlteration(reqBody MerchantSettlementCardAlterationReq) (res *BaseMerchantRes[MerchantSettlementCardAlterationRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantUploadPost("settlementCardAlteration", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageUrlUpload 商户资质图片Url上传
+func (t *Client) MerchantCredentialImageUrlUpload(reqBody MerchantCredentialImageUrlUploadReq) (res *BaseRes[MerchantCredentialImageUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageUrlUpload"
+	reqBody.InterfaceName = "imageUrlUpload"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantSettlementCardAlterationRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageUploadRes](baseRes)
 }
 
-// MerchantUploadCredential 商户资质上传接口
-func (t *Client) MerchantUploadCredential(reqBody MerchantUploadCredentialReq) (res *BaseMerchantRes[MerchantUploadCredentialRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantUploadPost("uploadCredential", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageUploadQuery 商户资质图片上传查询
+func (t *Client) MerchantCredentialImageUploadQuery(reqBody MerchantCredentialImageUploadQueryReq) (res *BaseRes[MerchantCredentialImageUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageUploadQuery"
+	reqBody.InterfaceName = "imageUploadQuery"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadCredentialRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageUploadRes](baseRes)
 }
 
-// MerchantUploadCredentialQuery 商户资质上传查询接口
-func (t *Client) MerchantUploadCredentialQuery(reqBody MerchantUploadCredentialQueryReq) (res *BaseMerchantRes[MerchantUploadCredentialQueryRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("credentialQuery", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageUrlUploadQuery 商户资质图片Url上传查询
+func (t *Client) MerchantCredentialImageUrlUploadQuery(reqBody MerchantCredentialImageUploadQueryReq) (res *BaseRes[MerchantCredentialImageUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageUrlUploadQuery"
+	reqBody.InterfaceName = "imageUrlUploadQuery"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadCredentialQueryRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageUploadRes](baseRes)
 }
 
-// MerchantUploadAlterationCredential 商户资质上传变更接口
-func (t *Client) MerchantUploadAlterationCredential(reqBody MerchantUploadAlterationCredentialReq) (res *BaseMerchantRes[MerchantUploadAlterationCredentialRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantUploadPost("uploadAlterationAptitude", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageChangeUpload 商户资质图片变更上传
+func (t *Client) MerchantCredentialImageChangeUpload(reqBody MerchantCredentialImageChangeUploadReq) (res *BaseRes[MerchantCredentialImageChangeUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageChangeUpload"
+	reqBody.InterfaceName, reqBody.ChangeType = "imageChangeUpload", "MERCHANT_CREDENTIAL"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.merchantImageFormUpload(path, reqBody, reqBody.CredentialType, reqBody.GetFileContent); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadAlterationCredentialRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageChangeUploadRes](baseRes)
 }
 
-// MerchantUploadCredentialUrl 商户资质Url上传接口
-func (t *Client) MerchantUploadCredentialUrl(reqBody MerchantUploadCredentialUrlReq) (res *BaseMerchantRes[MerchantUploadCredentialUrlRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("uploadImageUrl", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageUrlChangeUpload 商户资质图片Url变更上传
+func (t *Client) MerchantCredentialImageUrlChangeUpload(reqBody MerchantCredentialImageUrlChangeUploadReq) (res *BaseRes[MerchantCredentialImageChangeUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/imageUrlChangeUpload"
+	reqBody.InterfaceName = "imageUrlChangeUpload"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadCredentialUrlRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageChangeUploadRes](baseRes)
 }
 
-// MerchantUploadCredentialUrlQuery 商户资质Url上传查询接口
-func (t *Client) MerchantUploadCredentialUrlQuery(reqBody MerchantUploadCredentialUrlQueryReq) (res *BaseMerchantRes[MerchantUploadCredentialUrlQueryRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("imageUrlQuery", reqBody); err != nil {
-		return nil, err
+// MerchantCredentialImageChangeUploadQuery 商户资质图片变更上传查询
+func (t *Client) MerchantCredentialImageChangeUploadQuery(reqBody MerchantCredentialImageChangeUploadQueryReq) (res *BaseRes[MerchantCredentialImageChangeUploadRes], err error) {
+	const path = "/trx/api/merchantCredential/changeOrderQuery"
+	reqBody.InterfaceName, reqBody.ChangeType = "changeOrderQuery", "MERCHANT_CREDENTIAL"
+	var baseRes *BaseRes[string]
+	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
+		return
 	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadCredentialUrlQueryRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
-}
-
-// MerchantUploadAlterationCredentialUrl 商户资质Url上传变更接口
-func (t *Client) MerchantUploadAlterationCredentialUrl(reqBody MerchantUploadAlterationCredentialUrlReq) (res *BaseMerchantRes[MerchantUploadAlterationCredentialUrlRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("imageUrlAlteration", reqBody); err != nil {
-		return nil, err
-	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantUploadAlterationCredentialUrlRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
-}
-
-// MerchantModifyProductConfig 商户产品手续费收取方式修改接口
-func (t *Client) MerchantModifyProductConfig(reqBody MerchantModifyProductConfigReq) (res *BaseMerchantRes[MerchantModifyProductConfigRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("modifyProductConfig", reqBody); err != nil {
-		return nil, err
-	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantModifyProductConfigRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
-}
-
-// MerchantModifyProductConfigQuery 商户产品手续费收取方式查询接口
-func (t *Client) MerchantModifyProductConfigQuery(reqBody MerchantModifyProductConfigQueryReq) (res *BaseMerchantRes[MerchantModifyProductConfigQueryRes], err error) {
-	var response *req.Response
-	if response, err = t.merchantPost("getProductConfig", reqBody); err != nil {
-		return nil, err
-	}
-	tmpRes := new(BaseMerchantRes[string])
-	if err = sonic.Unmarshal(response.Bytes(), tmpRes); err != nil {
-		return nil, err
-	}
-	res = &BaseMerchantRes[MerchantModifyProductConfigQueryRes]{Success: tmpRes.Success,
-		Code: tmpRes.Code, Message: tmpRes.Message, Sign: tmpRes.Sign, Hostname: tmpRes.Hostname}
-
-	if !res.Success || res.Code != "0000" {
-		return res, err
-	}
-	if tmpRes.Sign != t.MD5Sign([]string{tmpRes.Data}, t.commonSignKey) {
-		err = errors.New("响应内容验签失败")
-	}
-	if err = sonic.Unmarshal(t.Des3dDecrypt(tmpRes.Data, t.commonEncryptKey), &res.Data); err != nil {
-		return nil, err
-	}
-	return
+	return ParseRes[MerchantCredentialImageChangeUploadRes](baseRes)
 }
