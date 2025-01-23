@@ -1,7 +1,5 @@
 package dinpay
 
-import "github.com/bytedance/sonic"
-
 // AppPayAppletPreOrderReq 小程序预下单接口
 type AppPayAppletPreOrderReq struct {
 	InterfaceName  string  `json:"interfaceName"`            // 接口类型,固定为:AppPayApplet
@@ -36,10 +34,10 @@ type AppPayAppletPreOrderReq struct {
 	ReportId       string  `json:"reportId,omitempty"`       // 报备id
 
 	SplitType string `json:"splitType,omitempty"` // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
-	// Deprecated: 请勿直接赋值,应调从SplitRules添加
+	// Deprecated: 请勿直接赋值,应调用SplitRules添加
 	SplitRulesJson string                     `json:"splitRules,omitempty"` // 分账规则,Json格式字符串;分账类型和分账规则串出现时须2个字段都要上送
 	SplitRules     []*AppPayPreOrderSplitRule `json:"-"`                    // 分账规则
-	// Deprecated: 请勿直接赋值,应调从MarketingRules添加
+	// Deprecated: 请勿直接赋值,应调用MarketingRules添加
 	MarketingRulesJson string                       `json:"marketingRules,omitempty"` // 营销规则,JSON格式字符串
 	MarketingRules     *AppPayPreOrderMarketingRule `json:"-"`                        // 营销规则
 
@@ -47,26 +45,20 @@ type AppPayAppletPreOrderReq struct {
 
 // AppPayAppletPreOrderRes 小程序预下单接口
 type AppPayAppletPreOrderRes struct {
-	InterfaceName        string  `json:"interfaceName"`            // 接口类型,固定为:AppPayApplet
-	PaymentType          string  `json:"paymentType,omitempty"`    // 支付客户端类型,constants.PaymentType
-	PaymentMethods       string  `json:"paymentMethods"`           // 支付类型,固定为:APPLET
-	MerchantId           string  `json:"merchantId"`               // 商户编号
-	OrderNo              string  `json:"orderNo"`                  // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	PayAmount            float64 `json:"payAmount"`                // 交易金额,以元为单位,最小金额为0.01
-	Currency             string  `json:"currency"`                 // 币种类型,CNY:人民币
-	AppId                string  `json:"appid,omitempty"`          // 公众账号ID
-	PayInfo              string  `json:"payInfo"`                  // 原生态JS支付信息,is_raw为1时返回,json格式的字符串,作用于原生态JS支付时的参数;为小程序时返回的json串集成小程序JS接口时需要
-	ChannelNumber        string  `json:"channelNumber,omitempty"`  // 上游请求订单号,智付交易订单号
-	ChannelRetCode       string  `json:"channelRetCode,omitempty"` // 上游返回码,失败时透传上游返回码,仅供参考,请以订单状态为准
-	ChannelSubMerchantNo string  `json:"subMerchantNo,omitempty"`  // 渠道子商户号(U/A/T) 	// MD5 签名结果
-}
-
-func (res *AppPayAppletPreOrderRes) GetPayInfo() (payInfo *AppPayAppletPreOrderPayInfo) {
-	if len(res.PayInfo) > 0 {
-		payInfo = new(AppPayAppletPreOrderPayInfo)
-		_ = sonic.Unmarshal([]byte(res.PayInfo), payInfo)
-	}
-	return
+	InterfaceName  string  `json:"interfaceName"`         // 接口类型,固定为:AppPayApplet
+	PaymentType    string  `json:"paymentType,omitempty"` // 支付客户端类型,constants.PaymentType
+	PaymentMethods string  `json:"paymentMethods"`        // 支付类型,固定为:APPLET
+	MerchantId     string  `json:"merchantId"`            // 商户编号
+	OrderNo        string  `json:"orderNo"`               // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
+	PayAmount      float64 `json:"payAmount"`             // 交易金额,以元为单位,最小金额为0.01
+	Currency       string  `json:"currency"`              // 币种类型,CNY:人民币
+	AppId          string  `json:"appid,omitempty"`       // 公众账号ID
+	// Deprecated: 请勿直接赋值,应从PayInfo获取
+	PayInfoJson          string                       `json:"payInfo"`                  // 原生态JS支付信息,is_raw为1时返回,json格式的字符串,作用于原生态JS支付时的参数;为小程序时返回的json串集成小程序JS接口时需要
+	PayInfo              *AppPayAppletPreOrderPayInfo `json:"-"`                        // 原生态JS支付信息
+	ChannelNumber        string                       `json:"channelNumber,omitempty"`  // 上游请求订单号,智付交易订单号
+	ChannelRetCode       string                       `json:"channelRetCode,omitempty"` // 上游返回码,失败时透传上游返回码,仅供参考,请以订单状态为准
+	ChannelSubMerchantNo string                       `json:"subMerchantNo,omitempty"`  // 渠道子商户号(U/A/T) 	// MD5 签名结果
 }
 
 // AppPayAppletPreOrderPayInfo 小程序预下单支付信息

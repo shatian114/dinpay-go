@@ -43,7 +43,12 @@ func (t *Client) AppPayPublicPreOrder(reqBody AppPayPublicPreOrderReq) (res *Bas
 	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return nil, err
 	}
-	return ParseRes[AppPayPublicPreOrderRes](baseRes)
+	if res, err = ParseRes[AppPayPublicPreOrderRes](baseRes); err != nil {
+		return
+	} else if res.Code == "0000" && res.Data.PayInfoJson != "" {
+		err = sonic.UnmarshalString(res.Data.PayInfoJson, res.Data.PayInfo)
+	}
+	return
 }
 
 // AppPayWapPreOrder WAP(H5)预下单
@@ -100,7 +105,12 @@ func (t *Client) AppPayAppletPreOrder(reqBody AppPayAppletPreOrderReq) (res *Bas
 	if baseRes, err = t.appPayJsonPost(reqBody.MerchantId, path, reqBody); err != nil {
 		return nil, err
 	}
-	return ParseRes[AppPayAppletPreOrderRes](baseRes)
+	if res, err = ParseRes[AppPayAppletPreOrderRes](baseRes); err != nil {
+		return
+	} else if res.Code == "0000" && res.Data.PayInfoJson != "" {
+		err = sonic.UnmarshalString(res.Data.PayInfoJson, res.Data.PayInfo)
+	}
+	return
 }
 
 // AppPayOrderQuery 交易订单查询

@@ -41,10 +41,10 @@ type AppPayScanOrderReq struct {
 	ReportId       string `json:"reportId,omitempty"`       // 报备id
 
 	SplitType string `json:"splitType,omitempty"` // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
-	// Deprecated: 请勿直接赋值,应调从SplitRules添加
+	// Deprecated: 请勿直接赋值,应调用SplitRules添加
 	SplitRulesJson string                     `json:"splitRules,omitempty"` // 分账规则,Json格式字符串;分账类型和分账规则串出现时须2个字段都要上送
 	SplitRules     []*AppPayPreOrderSplitRule `json:"-"`                    // 分账规则
-	// Deprecated: 请勿直接赋值,应调从MarketingRules添加
+	// Deprecated: 请勿直接赋值,应调用MarketingRules添加
 	MarketingRulesJson string                       `json:"marketingRules,omitempty"` // 营销规则,JSON格式字符串
 	MarketingRules     *AppPayPreOrderMarketingRule `json:"-"`                        // 营销规则
 }
