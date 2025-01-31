@@ -46,6 +46,7 @@ func (t *Client) AppPayPublicPreOrder(reqBody AppPayPublicPreOrderReq) (res *Bas
 	if res, err = ParseRes[AppPayPublicPreOrderRes](baseRes); err != nil {
 		return
 	} else if res.Code == "0000" && res.Data.PayInfoJson != "" {
+		res.Data.PayInfo = &AppPayPublicPreOrderPayInfo{}
 		err = sonic.UnmarshalString(res.Data.PayInfoJson, res.Data.PayInfo)
 	}
 	return
@@ -108,6 +109,7 @@ func (t *Client) AppPayAppletPreOrder(reqBody AppPayAppletPreOrderReq) (res *Bas
 	if res, err = ParseRes[AppPayAppletPreOrderRes](baseRes); err != nil {
 		return
 	} else if res.Code == "0000" && res.Data.PayInfoJson != "" {
+		res.Data.PayInfo = &AppPayAppletPreOrderPayInfo{}
 		err = sonic.UnmarshalString(res.Data.PayInfoJson, res.Data.PayInfo)
 	}
 	return
