@@ -88,7 +88,7 @@ type MerchantWxPayDirsApplyReq struct {
 	OrderNo       string `json:"orderNo"`                 // 请求单号
 	MerchantId    string `json:"subMerchantId"`           // 子商户号
 	UpstreamNo    string `json:"upstreamNo"`              // 上游商户号
-	PayCatalogs   string `json:"payCatalog"`              // 支付授权目录,url格式参考微信公众号文档https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_3
+	PayCatalog    string `json:"payCatalog"`              // 支付授权目录,url格式参考微信公众号文档https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_3
 	ReportingType string `json:"reportingType,omitempty"` // 报备类型 constants.ReportType
 }
 
