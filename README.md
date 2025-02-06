@@ -11,3 +11,8 @@ devMode := false // devMode 为true会打印接口请求和响应内容, 依然�
 client, err := dinpay.NewClient(platformMerchantId, merchantSM2PrivatePassword,
 merchantSM2PrivateKeyPath, platformSM2PublicKeyPath, devMode)
 ```
+
+### 打赏
+赞赏多少都是您的心意，感谢您的支持！
+
+<img src="./image/微信收款码.jpg" height="300"> <img src="./image/支付宝收款码.jpg" height="300">
