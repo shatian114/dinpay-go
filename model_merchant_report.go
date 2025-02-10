@@ -118,12 +118,16 @@ type MerchantWxPublicApplyQueryRes struct {
 	ConfigStatus string `json:"configStatus"`        // 结果,constants.ReportResult
 	FailedMsg    string `json:"failedMsg,omitempty"` // 失败原因
 	// 以下在configStatus为’SUCCESS’时才有返回;  receiptAppIds, channelName都不传则返回JSON数组upstreamData
-	ReportId          string `json:"reportId,omitempty"`          // 报备ID
-	ChannelId         string `json:"channelId,omitempty"`         // 渠道
-	UpstreamNo        string `json:"upstreamNo,omitempty"`        // 上游商户号
-	AppIds            string `json:"appIds,omitempty"`            // 支付公众号
-	ReceiptAppIds     string `json:"receiptAppIds,omitempty"`     // 关注小程序
-	PayCatalogs       string `json:"payCatalogs,omitempty"`       // 授权目录
-	AppidConfigStatus string `json:"appidConfigStatus,omitempty"` // 支付目录,appId配置状态
-	ConfigChannelMsg  string `json:"configChannelMsg,omitempty"`  // 配置信息
+	UpstreamData []MerchantWxPublicApplyUpstreamDataItem `json:"upstreamData,omitempty"` // 上游报备信息
+}
+
+type MerchantWxPublicApplyUpstreamDataItem struct {
+	ReportId          string   `json:"reportId,omitempty"`          // 报备ID
+	ChannelId         string   `json:"channelId,omitempty"`         // 渠道
+	UpstreamNo        string   `json:"upstreamNo,omitempty"`        // 上游商户号
+	AppIds            []string `json:"appIds,omitempty"`            // 支付公众号
+	PayCatalogs       []string `json:"payCatalogs,omitempty"`       // 授权目录
+	ReceiptAppIds     []string `json:"receiptAppIds,omitempty"`     // 关注小程序
+	AppidConfigStatus string   `json:"appidConfigStatus,omitempty"` // 支付目录,appId配置状态
+	ConfigChannelMsg  string   `json:"configChannelMsg,omitempty"`  // 配置信息
 }
