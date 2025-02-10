@@ -8,32 +8,32 @@ type MerchantInfoQueryReq struct {
 
 // MerchantInfoQueryRes 商户信息查询
 type MerchantInfoQueryRes struct {
-	MerchantId           string `json:"merchantNo"`                 // 子商户商编
-	MerchantName         string `json:"signName"`                   // 商户名称
-	MerchantShowName     string `json:"showName"`                   // 商户简称,用于支付收银台的展示名
-	CreateAt             string `json:"createDate"`                 // 入网时间
-	MerchantType         string `json:"merchantType"`               // 商户类型,见常量 constants.MerchantType
-	LegalPerson          string `json:"legalPerson"`                // 法人名字
-	LegalPersonID        string `json:"legalPersonID"`              // 法人身份证号
-	LegalIdCardStartDate string `json:"idCardStartDate,omitempty"`  // 法人身份证有效起始日期
-	LegalIdCardEndDate   string `json:"idCardEndDate,omitempty"`    // 法人身份证有效终止日期,1111-11-11代表长期有效
-	OrgNum               string `json:"orgNum,omitempty"`           // 组织机构代码
-	Province             string `json:"province"`                   // 子商户所在省份
-	City                 string `json:"city"`                       // 子商户所在城市
-	Region               string `json:"region,omitempty"`           // 子商户所在区县
-	Address              string `json:"address"`                    // 通讯地址
-	Contact              string `json:"linkman"`                    // 联系人
-	ContactPhone         string `json:"linkPhone"`                  // 联系电话
-	ContactEmail         string `json:"email"`                      // 联系邮箱
-	BindMobile           string `json:"bindMobile,omitempty"`       // 绑定手机
-	MerchantStatus       string `json:"merchantStatus"`             // 商户状态,见常量 constants.MerchantStatus
-	AccountStatus        string `json:"accountStatus"`              // 账户状态,见常量 constants.AccountStatus
-	BusinessCategory     string `json:"merchantCategory"`           // 经营类别,见常量 constants.BusinessCategory
-	BusinessLicense      string `json:"businessLicense"`            // 营业执照号
-	BusinessDateStart    string `json:"busLiceStartDate,omitempty"` // 营业执照有效起始日期
-	BusinessDateEnd      string `json:"busLiceEndDate,omitempty"`   // 营业执照有效终止日期,1111-11-11代表长期有效
-	PostalAddress        string `json:"postalAddress,omitempty"`    // 注册地址
-	ServicePhone         string `json:"servicePhone,omitempty"`     // 客服联系电话
+	MerchantId               string `json:"merchantNo"`                 // 子商户商编
+	MerchantName             string `json:"signName"`                   // 商户名称
+	MerchantShowName         string `json:"showName"`                   // 商户简称,用于支付收银台的展示名
+	CreateAt                 string `json:"createDate"`                 // 入网时间
+	MerchantType             string `json:"merchantType"`               // 商户类型,见常量 constants.MerchantType
+	OrgNum                   string `json:"orgNum,omitempty"`           // 组织机构代码
+	BizCategory              string `json:"merchantCategory"`           // 经营类别,见常量 constants.BusinessCategory
+	LegalName                string `json:"legalPerson"`                // 法人名字
+	LegalIdNo                string `json:"legalPersonID"`              // 法人身份证号
+	LegalIdCardStartDate     string `json:"idCardStartDate,omitempty"`  // 法人身份证有效起始日期
+	LegalIdCardEndDate       string `json:"idCardEndDate,omitempty"`    // 法人身份证有效终止日期,1111-11-11代表长期有效
+	Province                 string `json:"province"`                   // 子商户所在省份
+	City                     string `json:"city"`                       // 子商户所在城市
+	Region                   string `json:"region,omitempty"`           // 子商户所在区县
+	Address                  string `json:"address"`                    // 通讯地址
+	ContactName              string `json:"linkman"`                    // 联系人
+	ContactPhone             string `json:"linkPhone"`                  // 联系电话
+	ContactEmail             string `json:"email"`                      // 联系邮箱
+	BindMobile               string `json:"bindMobile,omitempty"`       // 绑定手机
+	ServicePhone             string `json:"servicePhone,omitempty"`     // 客服联系电话
+	MerchantStatus           string `json:"merchantStatus"`             // 商户状态,见常量 constants.MerchantStatus
+	AccountStatus            string `json:"accountStatus"`              // 账户状态,见常量 constants.AccountStatus
+	BusinessLicenseNo        string `json:"businessLicense"`            // 营业执照号
+	BusinessLicenseStartDate string `json:"busLiceStartDate,omitempty"` // 营业执照有效起始日期
+	BusinessLicenseEndDate   string `json:"busLiceEndDate,omitempty"`   // 营业执照有效终止日期,1111-11-11代表长期有效
+	PostalAddress            string `json:"postalAddress,omitempty"`    // 注册地址
 }
 
 // MerchantRegisterReq 商户入驻
@@ -43,33 +43,33 @@ type MerchantRegisterReq struct {
 	MerchantName             string `json:"merchantName"`                       // 商户名称,企业、个体工商户、事业单位、其他组织:营业执照上的工商注册名称;个人小微商户:商户_XXX(法人名称)
 	MerchantShowName         string `json:"merchantShowName"`                   // 商户简称,用于支付收银台的展示名,进件测试的可在简称中添加“测试”字样;注意:简称长度不能小于2大于20
 	MerchantType             string `json:"merchantType"`                       // 商户类型,见常量 constants.MerchantType,个人、企业、个体商户交易限额不同,切勿传错
-	OrgNum                   string `json:"orgNum"`                             // 组织机构代码,1.若是个人商户,统一填写身份证号;2.三证合一,则统一填营业执照号
-	BusinessLicenseType      string `json:"businessLicenseType,omitempty"`      // 营业证书类型,见常量 constants.CertType,默认为营业执照
-	BusinessLicense          string `json:"businessLicense"`                    // 营业执照号
-	BusinessCategory         string `json:"businessCategory"`                   // 经营类别,见常量 constants.BusinessCategory
-	CategoryId               string `json:"categoryId"`                         // 商户经营子类,具体值见附件
+	OrgNum                   string `json:"orgNum"`                             // 组织机构代码,1.若是个人商户,统一填写身份证号;2.三证合一,则统一填营业证件号
+	BizCategory              string `json:"businessCategory"`                   // 经营类别,见常量 constants.BusinessCategory
+	BizCategoryId            string `json:"categoryId"`                         // 商户经营子类id,具体值见附件
 	MicroBizType             string `json:"microBizType,omitempty"`             // 小微经营类型,见常量 constants.MicroBizType,小微个人商户必填
-	Mcc                      string `json:"mcc,omitempty"`                      // 银联MCC码
-	DistrictCode             string `json:"districtCode"`                       // 区县编码
-	Address                  string `json:"address"`                            // 地址
+	MccCode                  string `json:"mcc,omitempty"`                      // 银联MCC码
+	BizAddress               string `json:"address"`                            // 经营地址
+	BizDistrictCode          string `json:"districtCode"`                       // 经营区县编码
 	ServicePhone             string `json:"servicePhone,omitempty"`             // 用户支付后,可通过此号码进行咨询,如不填会送联系人电话。
 	BindMobile               string `json:"bindMobile,omitempty"`               // 绑定手机号
-	BusinessDateStart        string `json:"businessStartDate,omitempty"`        // 经营起始日期,yyyyMMdd,非个人商户必传
-	BusinessDateEnd          string `json:"businessEndDate,omitempty"`          // 经营结束日期,yyyyMMdd或者长期有效,非个人商户必传
-	LegalPerson              string `json:"legalPerson"`                        // 法人名字
-	LegalPersonId            string `json:"legalPersonID"`                      // 法人证件号
+	BusinessLicenseType      string `json:"businessLicenseType,omitempty"`      // 营业证书类型,见常量 constants.CertType,默认为营业执照
+	BusinessLicenseNo        string `json:"businessLicense,omitempty"`          // 营业执照号
+	BusinessLicenseStartDate string `json:"businessStartDate,omitempty"`        // 营业执照起始日期,yyyyMMdd,非个人商户必传
+	BusinessLicenseEndDate   string `json:"businessEndDate,omitempty"`          // 营业执照结束日期,yyyyMMdd或者长期有效,非个人商户必传
+	LegalName                string `json:"legalPerson"`                        // 法人名字
 	LegalIdType              string `json:"idType"`                             // 法人证件类型,见常量 constants.IdType
-	LegalIdCardStartDate     string `json:"idCardStartDate,omitempty"`          // 法人身份证开始日期,yyyyMMdd,开通微信产品必传
-	LegalIdCardEndDate       string `json:"idCardEndDate,omitempty"`            // 法人身份证结束日期,yyyyMMdd或者长期有效,开通微信产品必传
-	LegalPersonIdAddress     string `json:"legalPersonIdAddress,omitempty"`     // 法人证件居住地址,企业商户必传
-	Contact                  string `json:"contact"`                            // 联系人名称
-	ContactPhone             string `json:"contactPhone"`                       // 联系电话
+	LegalIdNo                string `json:"legalPersonID"`                      // 法人证件号
+	LegalIdAddress           string `json:"legalPersonIdAddress,omitempty"`     // 法人证件居住地址,企业商户必传
+	LegalIdStartDate         string `json:"idCardStartDate,omitempty"`          // 法人身份证开始日期,yyyyMMdd,开通微信产品必传
+	LegalIdEndDate           string `json:"idCardEndDate,omitempty"`            // 法人身份证结束日期,yyyyMMdd或者长期有效,开通微信产品必传
 	ContactEmail             string `json:"contactEmail"`                       // 各子商户邮箱地址唯一（可不用于接收邮件）
-	ContactId                string `json:"contactId,omitempty"`                // 联系人证件号,开通微信产品必填
+	ContactPhone             string `json:"contactPhone"`                       // 联系电话
+	ContactName              string `json:"contact"`                            // 联系人名称
 	ContactType              string `json:"contactType"`                        // 联系人类型,见常量 constants.ContactType,LEGAL:经营者/法人,SUPER:经办人
 	ContactIdType            string `json:"contactIdType,omitempty"`            // 联系人证件类型,见常量 constants.IdType
-	ContactIdCardStartDate   string `json:"contactIdCardStartDate,omitempty"`   // 联系人证件有效期开始时间,yyyyMMdd,联系人类型为经办人时必填
-	ContactIdCardEndDate     string `json:"contactIdCardEndDate,omitempty"`     // 联系人证件有效期结束时间,yyyyMMdd或长期有效,联系人类型为经办人时必填
+	ContactIdNo              string `json:"contactId,omitempty"`                // 联系人证件号,开通微信产品必填
+	ContactIdStartDate       string `json:"contactIdCardStartDate,omitempty"`   // 联系人证件有效期开始时间,yyyyMMdd,联系人类型为经办人时必填
+	ContactIdEndDate         string `json:"contactIdCardEndDate,omitempty"`     // 联系人证件有效期结束时间,yyyyMMdd或长期有效,联系人类型为经办人时必填
 	SettlementCycle          string `json:"settlementCycle"`                    // 结算周期,constants.SettlementCycle;T1:工作日隔天结算,D1:自然日隔天结算,D0:当日结算(目前不支持)
 	SettlementMode           string `json:"settlementMode"`                     // 结算方式,constants.SettlementMode;NOTOPEN:不开通;AUTO:自动结算;SELF:自主结算;
 	SettlementPostscript     string `json:"settlementPostscript,omitempty"`     // 结算附言,自动结算/自主结算所使用的备注信息
@@ -85,10 +85,10 @@ type MerchantRegisterReq struct {
 	ElectronicAccountName    string `json:"electronicAccountName,omitempty"`    // 电子账户户名
 	ElectronicSettleBankType string `json:"electronicSettleBankType,omitempty"` // 电子账户类型,constants.SettleBankType;TOPRIVATE:对私,TOPUBLIC:对公
 	UboType                  bool   `json:"uboType"`                            // 经营者/法人是否为受益人,企业商户必传
+	UboName                  string `json:"uboIdName,omitempty"`                // 受益人证件姓名,受益人非经营者/法人类型时必传
 	UboIdType                string `json:"uboIdType,omitempty"`                // 受益人证件类型,受益人非经营者/法人类型时必传
-	UboIdName                string `json:"uboIdName,omitempty"`                // 受益人证件姓名,受益人非经营者/法人类型时必传
-	UboId                    string `json:"uboId,omitempty"`                    // 受益人证件号码,受益人非经营者/法人类型时必传
-	UboAddress               string `json:"uboAddress,omitempty"`               // 受益人证件居住地址,受益人非经营者/法人类型时必传
+	UboIdNo                  string `json:"uboId,omitempty"`                    // 受益人证件号码,受益人非经营者/法人类型时必传
+	UboIdAddress             string `json:"uboAddress,omitempty"`               // 受益人证件居住地址,受益人非经营者/法人类型时必传
 	UboIdStartDate           string `json:"uboIdStartDate,omitempty"`           // 受益人证件有效期开始时间,yyyyMMdd,受益人非经营者/法人类型时必传
 	UboIdEndDate             string `json:"uboIdEndDate,omitempty"`             // 受益人证件有效期结束时间,yyMMdd或长期有效,受益人非经营者/法人类型时必传
 	ServiceCodes             string `json:"serviceCodes,omitempty"`             // 支付宝商户申请服务类型,如:"[\"F2F\",\"PRE_F2F\"]",constants.AlipayServiceCode
