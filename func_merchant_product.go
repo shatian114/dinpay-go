@@ -152,7 +152,7 @@ func (t *Client) MerchantModifyFeeConfig(reqBody MerchantModifyFeeConfigReq) (re
 // MerchantQueryFeeConfig 商户产品手续费配置查询
 func (t *Client) MerchantQueryFeeConfig(reqBody MerchantQueryFeeConfigReq) (res *BaseRes[MerchantQueryFeeConfigRes], err error) {
 	const path = "/trx/api/product/queryFeeConfig"
-	reqBody.InterfaceName, reqBody.QueryType = "configQuery", "FeeCollection"
+	reqBody.InterfaceName, reqBody.ModifyType = "configQuery", "FeeCollection"
 	var baseRes *BaseRes[string]
 	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
 		return

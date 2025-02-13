@@ -290,7 +290,7 @@ type MerchantModifyFeeConfigRes struct {
 type MerchantQueryFeeConfigReq struct {
 	InterfaceName string `json:"interfaceName"` // 接口名称,固定值:configModifi
 	MerchantId    string `json:"subMerchantId"` // 子商户编号,进件审核通过后才有的商户号
-	QueryType     string `json:"queryType"`     // 查询类型,固定值:固定值:FeeCollection
+	ModifyType    string `json:"modifyType"`    // 查询类型,固定值:固定值:FeeCollection
 	ProductType   string `json:"productType"`   // 产品类型:APPPAY:扫码,SETTLEMENT:结算
 }
 
