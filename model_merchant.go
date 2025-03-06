@@ -56,6 +56,7 @@ type MerchantRegisterReq struct {
 	BusinessLicenseNo        string `json:"businessLicense,omitempty"`          // 营业执照号
 	BusinessLicenseStartDate string `json:"businessStartDate,omitempty"`        // 营业执照起始日期,yyyyMMdd,非个人商户必传
 	BusinessLicenseEndDate   string `json:"businessEndDate,omitempty"`          // 营业执照结束日期,yyyyMMdd或者长期有效,非个人商户必传
+	LegalPhone               string `json:"legalPersonPhone"`                   // 法人手机号已被使用时法人名称必须相同，法人手机号传过的情况下，后续重复使用进件时法人证件、名称要与之前入网的一致
 	LegalName                string `json:"legalPerson"`                        // 法人名字
 	LegalIdType              string `json:"idType"`                             // 法人证件类型,见常量 constants.IdType
 	LegalIdNo                string `json:"legalPersonID"`                      // 法人证件号
@@ -101,6 +102,7 @@ type MerchantRegisterReq struct {
 	WebSite                  string `json:"webSite,omitempty"`                  // 商户交易网站地址,与“其他产品信息”二选一必填
 	OtherPdInfo              string `json:"otherPdInfo,omitempty"`              // 其他产品信息,可输入公众号/小程序/app名称,与“网站网址”二选一必填
 	AccessUrl                string `json:"accessUrl,omitempty"`                // 接入地址,空
+	IcpFiling                string `json:"icpFiling"`                          // ICP备案号，平台商类型为服务商时必填，平台商类型为SaaS系统商的子商户默认读取平台商的 ICP 备案号
 }
 
 // MerchantRegisterRes 商户入驻
