@@ -28,14 +28,14 @@ type AppPaySdkPreOrderReq struct {
 	SceneInfo      string  `json:"sceneInfo,omitempty"`      // 场景信息,该字段用于上报场景信息,目前支持上报实际门店信息; 详见 https://myshangpu.yuque.com/org-wiki-myshangpu-sfbw9n/qnpgdn/phtfgreqpllk9i2m#fxUGg
 	RequireScheme  string  `json:"requireScheme,omitempty"`  // 是否获取原生跳转链接, 1:是;0:否,不传默认是0
 	ReportId       string  `json:"reportId,omitempty"`       // 报备id
-	SplitType      string  `json:"splitType,omitempty"`      // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
+
+	SplitType string `json:"splitType,omitempty"` // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
 	// Deprecated: 请勿直接赋值,应调用SplitRules添加
 	SplitRulesJson string                     `json:"splitRules,omitempty"` // 分账规则,Json格式字符串;分账类型和分账规则串出现时须2个字段都要上送
 	SplitRules     []*AppPayPreOrderSplitRule `json:"-"`                    // 分账规则
 	// Deprecated: 请勿直接赋值,应调用MarketingRules添加
 	MarketingRulesJson string                       `json:"marketingRules,omitempty"` // 营销规则,JSON格式字符串
 	MarketingRules     *AppPayPreOrderMarketingRule `json:"-"`                        // 营销规则
-
 }
 
 // AppPaySdkPreOrderRes SDK(APP)预下单接口

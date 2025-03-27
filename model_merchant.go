@@ -92,7 +92,6 @@ type MerchantRegisterReq struct {
 	UboIdAddress             string `json:"uboAddress,omitempty"`               // 受益人证件居住地址,受益人非经营者/法人类型时必传
 	UboIdStartDate           string `json:"uboIdStartDate,omitempty"`           // 受益人证件有效期开始时间,yyyyMMdd,受益人非经营者/法人类型时必传
 	UboIdEndDate             string `json:"uboIdEndDate,omitempty"`             // 受益人证件有效期结束时间,yyMMdd或长期有效,受益人非经营者/法人类型时必传
-	ServiceCodes             string `json:"serviceCodes,omitempty"`             // 支付宝商户申请服务类型,如:"[\"F2F\",\"PRE_F2F\"]",constants.AlipayServiceCode
 	Longitude                string `json:"longitude,omitempty"`                // 经度,如:113.292482
 	Latitude                 string `json:"latitude,omitempty"`                 // 纬度,如:23.201091
 	NeedAuth                 bool   `json:"needAuth,omitempty"`                 // 是否需要接口提交商家注册申请单,true:系统自动去微信、支付宝提交商家注册申请单
@@ -100,9 +99,13 @@ type MerchantRegisterReq struct {
 	NotifyUrl                string `json:"notifyUrl,omitempty"`                // 异步通知地址,人工审核后异步回调地址(返回参数为JSON数据)注:只有人工审核完成的会异步通知;自动审核通过,不会通知
 	AuthorizationKey         bool   `json:"authorizationKey"`                   // 是否统一使用平台商秘钥,true代表授权,false代表不授权,注:平台密钥,通常默认为true
 	WebSite                  string `json:"webSite,omitempty"`                  // 商户交易网站地址,与“其他产品信息”二选一必填
-	OtherPdInfo              string `json:"otherPdInfo,omitempty"`              // 其他产品信息,可输入公众号/小程序/app名称,与“网站网址”二选一必填
+	OtherPdInfo              string `json:"otherPdInfo,omitempty"`              // 其他产品信息,可输入公众号/小程序/app名称,与“商户交易网站地址”二选一必填
 	AccessUrl                string `json:"accessUrl,omitempty"`                // 接入地址,空
 	IcpFiling                string `json:"icpFiling"`                          // ICP备案号，平台商类型为服务商时必填，平台商类型为SaaS系统商的子商户默认读取平台商的 ICP 备案号
+
+	// Deprecated: 请勿直接赋值,应调用ServiceCodes添加
+	ServiceCodesJson string `json:"serviceCodes,omitempty"` // 支付宝商户申请服务类型,如:"[\"F2F\",\"PRE_F2F\"]",constants.AlipayServiceCode
+	ServiceCodes     string `json:"-"`                      // 支付宝商户申请服务类型,如:["F2F","PRE_F2F"],constants.AlipayServiceCode
 }
 
 // MerchantRegisterRes 商户入驻

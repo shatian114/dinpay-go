@@ -12,6 +12,10 @@ import (
 func (t *Client) MerchantRegister(reqBody MerchantRegisterReq) (res *BaseRes[MerchantRegisterRes], err error) {
 	const path = "/trx/api/merchantEntry/registered"
 	reqBody.InterfaceName = "register"
+	reqBody.ServiceCodesJson = ""
+	if len(reqBody.ServiceCodes) > 0 {
+		reqBody.ServiceCodesJson, _ = sonic.MarshalString(reqBody.ServiceCodes)
+	}
 	var baseRes *BaseRes[string]
 	if baseRes, err = t.commonJsonPost(path, reqBody); err != nil {
 		return nil, err

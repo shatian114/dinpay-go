@@ -35,7 +35,8 @@ type AppPayPublicPreOrderReq struct {
 	ExtendParams   string  `json:"extendParams,omitempty"`   // 业务扩展参数,目前是扫码支付宝用:https://open.alipay.com/api
 	Pid            string  `json:"pid"`                      // 服务商pid,不传以平台配置为准(仅银联二维码生效)
 	ReportId       string  `json:"reportId,omitempty"`       // 报备id
-	SplitType      string  `json:"splitType,omitempty"`      // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
+
+	SplitType string `json:"splitType,omitempty"` // 分账类型,FIXED_AMOUNT:固定金额(默认,目前只支持固定金额);RATE:比率
 	// Deprecated: 请勿直接赋值,应调用SplitRules添加
 	SplitRulesJson string                     `json:"splitRules,omitempty"` // 分账规则,Json格式字符串;分账类型和分账规则串出现时须2个字段都要上送
 	SplitRules     []*AppPayPreOrderSplitRule `json:"-"`                    // 分账规则
@@ -47,15 +48,14 @@ type AppPayPublicPreOrderReq struct {
 
 // AppPayPublicPreOrderRes 公众号/JS/服务窗预下单接口
 type AppPayPublicPreOrderRes struct {
-	InterfaceName  string  `json:"interfaceName"`         // 接口类型,固定为:AppPayPublic
-	PaymentType    string  `json:"paymentType,omitempty"` // 支付客户端类型,constants.PaymentType
-	PaymentMethods string  `json:"paymentMethods"`        // 支付类型,固定为:PUBLIC
-	MerchantId     string  `json:"merchantId"`            // 商户编号
-	OrderNo        string  `json:"orderNo"`               // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	PayAmount      float64 `json:"payAmount"`             // 交易金额,以元为单位,最小金额为0.01
-	Currency       string  `json:"currency"`              // 币种类型,CNY:人民币
-	AppId          string  `json:"appid,omitempty"`       // 公众账号ID
-	// Deprecated: 请勿直接赋值,应从PayInfo获取
+	InterfaceName        string                       `json:"interfaceName"`            // 接口类型,固定为:AppPayPublic
+	PaymentType          string                       `json:"paymentType,omitempty"`    // 支付客户端类型,constants.PaymentType
+	PaymentMethods       string                       `json:"paymentMethods"`           // 支付类型,固定为:PUBLIC
+	MerchantId           string                       `json:"merchantId"`               // 商户编号
+	OrderNo              string                       `json:"orderNo"`                  // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
+	PayAmount            float64                      `json:"payAmount"`                // 交易金额,以元为单位,最小金额为0.01
+	Currency             string                       `json:"currency"`                 // 币种类型,CNY:人民币
+	AppId                string                       `json:"appid,omitempty"`          // 公众账号ID
 	PayInfoJson          string                       `json:"payInfo"`                  // 原生态JS支付信息,is_raw为1时返回,json格式的字符串,作用于原生态JS支付时的参数;为小程序时返回的json串集成小程序JS接口时需要
 	PayInfo              *AppPayPublicPreOrderPayInfo `json:"-"`                        // 原生态JS支付信息
 	ChannelNumber        string                       `json:"channelNumber,omitempty"`  // 上游请求订单号,智付交易订单号

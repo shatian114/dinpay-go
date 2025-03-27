@@ -40,20 +40,18 @@ type AppPayAppletPreOrderReq struct {
 	// Deprecated: 请勿直接赋值,应调用MarketingRules添加
 	MarketingRulesJson string                       `json:"marketingRules,omitempty"` // 营销规则,JSON格式字符串
 	MarketingRules     *AppPayPreOrderMarketingRule `json:"-"`                        // 营销规则
-
 }
 
 // AppPayAppletPreOrderRes 小程序预下单接口
 type AppPayAppletPreOrderRes struct {
-	InterfaceName  string  `json:"interfaceName"`         // 接口类型,固定为:AppPayApplet
-	PaymentType    string  `json:"paymentType,omitempty"` // 支付客户端类型,constants.PaymentType
-	PaymentMethods string  `json:"paymentMethods"`        // 支付类型,固定为:APPLET
-	MerchantId     string  `json:"merchantId"`            // 商户编号
-	OrderNo        string  `json:"orderNo"`               // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
-	PayAmount      float64 `json:"payAmount"`             // 交易金额,以元为单位,最小金额为0.01
-	Currency       string  `json:"currency"`              // 币种类型,CNY:人民币
-	AppId          string  `json:"appid,omitempty"`       // 公众账号ID
-	// Deprecated: 请勿直接赋值,应从PayInfo获取
+	InterfaceName        string                       `json:"interfaceName"`            // 接口类型,固定为:AppPayApplet
+	PaymentType          string                       `json:"paymentType,omitempty"`    // 支付客户端类型,constants.PaymentType
+	PaymentMethods       string                       `json:"paymentMethods"`           // 支付类型,固定为:APPLET
+	MerchantId           string                       `json:"merchantId"`               // 商户编号
+	OrderNo              string                       `json:"orderNo"`                  // 商户系统内部订单号,要求50字符以内,同一商户号下订单号唯一
+	PayAmount            float64                      `json:"payAmount"`                // 交易金额,以元为单位,最小金额为0.01
+	Currency             string                       `json:"currency"`                 // 币种类型,CNY:人民币
+	AppId                string                       `json:"appid,omitempty"`          // 公众账号ID
 	PayInfoJson          string                       `json:"payInfo"`                  // 原生态JS支付信息,is_raw为1时返回,json格式的字符串,作用于原生态JS支付时的参数;为小程序时返回的json串集成小程序JS接口时需要
 	PayInfo              *AppPayAppletPreOrderPayInfo `json:"-"`                        // 原生态JS支付信息
 	ChannelNumber        string                       `json:"channelNumber,omitempty"`  // 上游请求订单号,智付交易订单号
