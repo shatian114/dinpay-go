@@ -3,8 +3,8 @@ module github.com/cyjaysong/dinpay-go
 go 1.22.0
 
 require (
-	github.com/bytedance/sonic v1.13.1
-	github.com/deatil/go-cryptobin v1.0.5029-0.20250228073859-dd257d7f8baa
+	github.com/bytedance/sonic v1.13.2
+	github.com/deatil/go-cryptobin v1.0.5029-0.20250327040923-4729bc311f4e
 	github.com/imroc/req/v3 v3.50.0
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/shopspring/decimal v1.4.0
